@@ -1,0 +1,68 @@
+/* Misc globals. */
+body {
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    font-size: 13px;
+    font-weight: normal;
+    margin: 0px;
+    background-image: linear-gradient(rgba(225, 24, 71, 0.4), rgba(225, 24, 71, 0));
+    background-size: cover;
+    background-repeat: no-repeat;
+    width: 100%;
+    height: 100%;
+}
+
+div {
+    margin: 0;
+    padding: 0;
+}
+
+h2 {
+    margin: 0;
+}
+
+.main-div {
+    min-width: 750px;
+    width: 57.69em;
+    margin: 0 auto;
+    text-align: left;
+}
+/* End misc globals. */
+
+/* Header styles. */
+.logo-div {
+    margin: 0 auto;
+    overflow: hidden;
+    line-height: 0;
+}
+
+.logo-div img {
+    margin: auto;
+    display: block;
+    border: none;
+}
+/* End header styles. */
+
+/* Container system. */
+.container-wrapper {
+    border: 1px solid;
+    border-color: currentColor;
+    margin-bottom: 0.5em;
+    padding-bottom: 0.5em;
+}
+
+.container-header {
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+    background-color: #edc0ca;
+    background-repeat: repeat;
+    background-clip: border-box;
+    background-origin: padding-box;
+}
+
+.container-content {
+    padding-left: 0.5em;
+    padding-right: 0.5em;
+    padding-top: 0.25em;
+    padding-bottom: 0.25em;
+}
+/* End container system. */

@@ -1,0 +1,33 @@
+<?php
+
+if (!defined('ROOT_PATH')) {
+    define('ROOT_PATH', dirname(__DIR__) . '/');
+}
+
+// Because we cannot use composer class auto loading, 
+// we need to require classes to use them.
+require_once ROOT_PATH.'3leaf/Controllers/HomeController.php';
+require_once ROOT_PATH.'3leaf/Controllers/BoardsController.php';
+
+require_once ROOT_PATH.'framework/Router.php';
+require_once ROOT_PATH.'framework/ExceptionHandler.php';
+
+use Dalton\Framework\Router;
+
+error_reporting(E_ALL);
+set_error_handler('Dalton\Framework\ExceptionHandler::errorHandler');
+set_exception_handler('Dalton\Framework\ExceptionHandler::exceptionHandler');
+
+$router = new Router();
+
+$router->add('', 
+    ['controller' => 'Dalton\ThreeLeaf\Controllers\Home', 
+    'task' => 'show', 'method' => 'GET']);
+
+$router->add('boards', 
+    ['controller' => 'Dalton\ThreeLeaf\Controllers\Boards', 
+    'task' => 'list', 'method' => 'GET']);
+
+$router->execute($_SERVER['QUERY_STRING'], $_SERVER['REQUEST_METHOD']); 
+
+?>
