@@ -25,7 +25,7 @@ CREATE TABLE users (
 CREATE TABLE files (
     id int NOT NULL AUTO_INCREMENT,
     uploader_id int NOT NULL,
-    file_name varchar(36) NOT NULL,
+    file_name varchar(36) NOT NULL UNIQUE,
     FOREIGN KEY(uploader_id) REFERENCES users(id),
     PRIMARY KEY(id)
 );
@@ -49,7 +49,7 @@ CREATE TABLE threads (
     time_updated TIMESTAMP,
     post_count int NOT NULL,
     image_count int NOT NULL,
-    name varchar(1025) NOT NULL,
+    name varchar(1024) NOT NULL,
     FOREIGN KEY(board_id) REFERENCES boards(id),
     PRIMARY KEY(id)
 );
@@ -66,6 +66,8 @@ CREATE TABLE posts (
     FOREIGN KEY(file_id) REFERENCES files(id),
     PRIMARY KEY(id)
 );
+
+INSERT INTO posts (thread_id, uploader_id, )
 
 CREATE TABLE post_replies (
     id int NOT NULL AUTO_INCREMENT,

@@ -8,6 +8,8 @@ if (!defined('ROOT_PATH')) {
 // we need to require classes to use them.
 require_once ROOT_PATH.'3leaf/Controllers/HomeController.php';
 require_once ROOT_PATH.'3leaf/Controllers/BoardsController.php';
+require_once ROOT_PATH.'3leaf/Controllers/ThreadsController.php';
+require_once ROOT_PATH.'3leaf/Controllers/SidenavController.php';
 
 require_once ROOT_PATH.'framework/Router.php';
 require_once ROOT_PATH.'framework/ExceptionHandler.php';
@@ -27,6 +29,14 @@ $router->add('',
 $router->add('boards', 
     ['controller' => 'Dalton\ThreeLeaf\Controllers\Boards', 
     'task' => 'list', 'method' => 'GET']);
+
+$router->add('threads/{board=[a-zA-Z]*}', 
+    ['controller' => 'Dalton\ThreeLeaf\Controllers\Threads', 
+    'task' => 'listFromBoard', 'method' => 'GET']);
+
+$router->add('sidenav', 
+    ['controller' => 'Dalton\ThreeLeaf\Controllers\Sidenav', 
+    'task' => 'show', 'method' => 'GET']);
 
 $router->execute($_SERVER['QUERY_STRING'], $_SERVER['REQUEST_METHOD']); 
 

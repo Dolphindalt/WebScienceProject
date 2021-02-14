@@ -14,7 +14,9 @@ class ExceptionHandler {
 
     public static function exceptionHandler($exception) {
         $code = $exception->getCode();
-        http_response_code($code);
+        if (is_int($code)) {
+            http_response_code($code);
+        }
         if (SHOW_SERVER_ERROR) {
             echo "<h1>Server side exception</h1>";
             echo "<p>From class '" . get_class($exception) . "'</p>";

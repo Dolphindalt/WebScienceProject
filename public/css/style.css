@@ -1,10 +1,14 @@
 /* Misc globals. */
+html {
+    height: 100%;
+}
+
 body {
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     font-size: 13px;
     font-weight: normal;
     margin: 0px;
-    background-image: linear-gradient(rgba(225, 24, 71, 0.4), rgba(225, 24, 71, 0));
+    background-image: linear-gradient(rgba(231, 93, 120, 0.5), rgba(225, 24, 71, 0.0));
     background-size: cover;
     background-repeat: no-repeat;
     width: 100%;
@@ -20,7 +24,14 @@ h2 {
     margin: 0;
 }
 
+.flex-container {
+    display: grid;
+    grid-template-columns: 0.2fr 1fr;
+    height: 100%;
+}
+
 .main-div {
+    display: block;
     min-width: 750px;
     width: 57.69em;
     margin: 0 auto;
@@ -42,18 +53,43 @@ h2 {
 }
 /* End header styles. */
 
+/* Sidenav. */
+#sidebar-frame {
+    border: none;
+}
+
+.sidenav {
+    display: block;
+    height: 100%;
+    width: 200px;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    overflow-x: hidden;
+    background-color: white;
+    padding-top: 20px;
+}
+
+.sidenav a {
+    padding: 6px 8px 6px 16px;
+    text-decoration: none;
+    display: block;
+}
+/* End sidenav. */
+
 /* Container system. */
 .container-wrapper {
     border: 1px solid;
     border-color: currentColor;
     margin-bottom: 0.5em;
     padding-bottom: 0.5em;
+    background-color: #ebcfd4;
 }
 
 .container-header {
     padding-left: 0.5em;
     padding-right: 0.5em;
-    background-color: #edc0ca;
+    background-color: #e05f7b;
     background-repeat: repeat;
     background-clip: border-box;
     background-origin: padding-box;
@@ -66,3 +102,44 @@ h2 {
     padding-bottom: 0.25em;
 }
 /* End container system. */
+
+/* Modal styling. */
+#modal-wrapper {
+    display: none;
+    position: fixed;
+    z-index: 2;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0);
+}
+
+#modal {
+    display: none;
+    position: absolute;
+    width: 300px;
+    z-index: 3;
+}
+
+#model-draggable {
+    cursor: move;
+}
+
+#modal-close {
+    cursor: pointer !important;
+    float: right;
+    font-weight: bold;
+}
+
+#modal-close:hover,
+#modal-close:focus {
+    text-decoration: none;
+    cursor: pointer;
+}
+
+#modal-show {
+    
+}
+/* End modal styling. */

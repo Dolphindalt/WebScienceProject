@@ -9,12 +9,10 @@ use Dalton\ThreeLeaf\Models\BoardModel;
 use Dalton\Framework\ControllerBase;
 
 class Boards extends ControllerBase {
-
     public function listTask() {
         $boards = BoardModel::getBoards();
         echo json_encode($boards);
     }
-
 };
 
 ?>
