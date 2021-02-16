@@ -8,6 +8,7 @@ if (!defined('ROOT_PATH')) {
 
 require_once ROOT_PATH.'config.php';
 require_once ROOT_PATH.'3leaf/Models/BoardModel.php';
+require_once ROOT_PATH.'3leaf/global_const.php';
 
 use Dalton\ThreeLeaf\Models\BoardModel;
 
@@ -46,7 +47,13 @@ use Dalton\ThreeLeaf\Models\BoardModel;
                     ?>
                 </span>
                 <span style='float:right;'>
-                    [ <a href='index.php?login'>Login</a> | <a href='index.php?register'>Register</a> ]
+                    <?php
+                        if (!isset($_SESSION[LOGGED_IN])) {
+                            echo "[ <a href='index.php?login'>Login</a> | <a href='index.php?register'>Register</a> ]";
+                        } else {
+                            echo "[ <a href='index.php?logout'>Logout</a> ]";
+                        }
+                    ?>
                 </span>
             </div>
             <div class='main-wrapper'>
