@@ -41,12 +41,19 @@ abstract class ControllerBase {
 
     }
 
-    public function encodeClassObjectsToJSON($array) {
-        $exposed_array = [];
-        foreach ($array as $value) {
-            array_push($exposed_array, $value->expose());
-        }
-        return $exposed_array;
+    public function pageNotFound() {
+        http_response_code(404);
+        include(ROOT_PATH.'3leaf/Views/NotFoundView.php');
+        die();
+    }
+
+    public function strip_html_and_slashes_and_non_spaces($input) {
+        $input = stripslashes($input);
+        $input = htmlspecialchars($input);
+        $input = trim($input, ['\n', '\t', '\0', '\x0B', '\r']);
+        $input = rtrim($input);
+        $input = ltrim($input);
+        return $input;
     }
 }
 

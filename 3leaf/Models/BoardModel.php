@@ -16,6 +16,23 @@ class BoardModel extends Model {
         return $results;
     }
 
+    public static function getBoardIdFromDirectory($dir) {
+        $statement = Model::getDB()->prepare('CALL getBoardIdFromDirectory(?, @board)');
+        $statement->bindParam(1, $dir, PDO::PARAM_STR);
+        $result_set = $statement->execute();
+        $statement->closeCursor();
+        $result = Model::getDB()->query('SELECT @board AS board')->fetch(PDO::FETCH_ASSOC);
+        return $result['board'];
+    }
+
+    public static function getBoardFromDirectory($dir) {
+        $statement = Model::getDB()->prepare('CALL getBoardFromDirectory(?)');
+        $statement->bindParam(1, $dir, PDO::PARAM_STR);
+        $result_set = $statement->execute();
+        $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+        return $result[0];
+    }
+
 }
 
 ?>

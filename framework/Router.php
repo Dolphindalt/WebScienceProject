@@ -2,25 +2,35 @@
 
 namespace Dalton\Framework;
 
+use Exception;
+
 class Router {
 
     private $routes = [];
 
     public function __construct() {
+
     }
 
     public function add($route, $params = []) {
+        if (!isset($params['method'])) {
+            throw new Exception('Route method must be defined.', 500);
+        }
+        if (!isset($params['task'])) {
+            throw new Exception('Route task must be set.', 500);
+        }
         $route = preg_replace('/\//', '\\/', $route);
         $route = preg_replace('/\{([a-zA-Z]+)=([^\}]+)\}/', '\1=\2', $route);
         $route = '/^' . $route . '$/i';
-        $this->routes[$route] = $params;
+        $route_id = $route . " " . $params['method'];
+        $this->routes[$route_id] = $params;
     }
 
     public function execute($url, $method) {
         $url = strtok($url, '?');
-
         foreach ($this->routes as $route => $params) {
-            if (preg_match($route, $url, $matches)) {
+            $route_path = explode(" ", $route)[0];
+            if (preg_match($route_path, $url, $matches)) {
                 foreach ($matches as $key => $match) {
                     if (is_string($key)) {
                         $params[$key] = $match;
