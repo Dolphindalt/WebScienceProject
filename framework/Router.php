@@ -23,6 +23,9 @@ class Router {
         $route = preg_replace('/\{([a-zA-Z]+)=([^\}]+)\}/', '\1=\2', $route);
         $route = '/^' . $route . '$/i';
         $route_id = $route . " " . $params['method'];
+        if (array_key_exists($route_id, $this->routes)) {
+            throw new Exception('Duplicate route ID found.', 500);
+        }
         $this->routes[$route_id] = $params;
     }
 

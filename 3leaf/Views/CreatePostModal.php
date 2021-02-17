@@ -6,10 +6,10 @@
                 <div class='inline' id='modal-close'>X</div>
             </div>
             <div class='container-content'>
-                <form action="<?php echo htmlspecialchars('router.php?/some/route'); ?>" method='post' enctype='multipart/form-data'>
-                    <span><label for='image'>Image:</label><input class='form-input' type='file' name='image'/></span><br>
-                    <span><label for='comment'>Comment:</label><textarea class='form-input' name='comment'></textarea></span><br>
-                    <input type='submit' value='Post'/>
+                <form id='postForm' method='post' enctype='multipart/form-data'>
+                    <span><input id='file' class='form-input' type='file' name='image'/></span><br>
+                    <span><textarea id='comment' class='form-input' name='comment' placeholder='Comment'></textarea></span><br>
+                    <button id='postButton' class='center'>Post</button>
                 </form>
             </div>
         </div>

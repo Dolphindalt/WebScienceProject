@@ -30,6 +30,9 @@ set_error_handler('Dalton\Framework\ExceptionHandler::errorHandler');
 set_exception_handler('Dalton\Framework\ExceptionHandler::exceptionHandler');
 
 $router = new Router();
+// POST requests made on a page using PHP form processor MUST use the 
+// same URL as the GET method for the page. Do not know how to fix it. 
+// Gave up after a few hours. It still works fine despite this defect.
 
 $router->add('', 
     ['controller' => 'Dalton\ThreeLeaf\Controllers\Home', 
@@ -42,6 +45,10 @@ $router->add('boards',
 $router->add('board/{dir=[a-zA-Z]*}', 
     ['controller' => 'Dalton\ThreeLeaf\Controllers\BoardPage',
     'task' => 'showBoardCatalog', 'method' => 'GET']);
+
+$router->add('board/{dir=[a-zA-Z]*}', 
+    ['controller' => 'Dalton\ThreeLeaf\Controllers\Threads', 
+    'task' => 'createThread', 'method' => 'POST']);
 
 $router->add('board/{dir=[a-zA-Z]*}/{thread=\d*}', 
     ['controller' => 'Dalton\ThreeLeaf\Controllers\ThreadPage',

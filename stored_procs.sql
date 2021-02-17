@@ -31,6 +31,22 @@ END //
 DELIMITER ;
 
 DELIMITER //
+CREATE OR REPLACE PROCEDURE getUserIdFromUsername(
+    IN username varchar(36),
+    OUT user_id int)
+BEGIN
+    SELECT
+        users.id
+    WHERE
+        LOWER(users.username) = LOWER(username)
+    LIMIT 
+        1
+    INTO 
+        user_id;
+END //
+DELIMITER ;
+
+DELIMITER //
 CREATE OR REPLACE PROCEDURE selectThreadsFromBoard(
     IN board_directory varchar(12))
 BEGIN
@@ -132,12 +148,14 @@ CREATE OR REPLACE PROCEDURE createThread(
     IN board_directory varchar(12),
     IN name varchar(1024),
     IN content varchar(8192),
-    IN uploader_id int,
+    IN uploader_name varchar(36),
     IN file_id int)
 BEGIN
     DECLARE board_id int;
     DECLARE thread_id int;
+    DECLARE uploader_id int;
     CALL getBoardIdFromDirectory(board_directory, board_id);
+    CALL getUserIdFromUsername(uploader_name, uploader_id);
     INSERT INTO threads (board_id, time_updated, post_count, image_count, name)
     VALUES (board_id, NOW(), 1, 1, name);
     SELECT LAST_INSERT_ID() INTO thread_id;
@@ -179,5 +197,22 @@ proc_label: BEGIN
     INSERT INTO passwords (password) VALUES (password);
     INSERT INTO users (password_id, username) VALUES (LAST_INSERT_ID(), username);
     SET errorMessage = '';
+END //
+DELIMITER ;
+
+DELIMITER //
+CREATE OR REPLACE PROCEDURE insertFileRecord(
+    IN file_name varchar(40),
+    IN uploader_name varchar(36))
+BEGIN
+    DECLARE uploader_id int;
+    SELECT 
+        users.id
+    WHERE
+        users.username = uploader_name
+    INTO uploader_id;
+    INSERT INTO files (uploader_id, file_name) 
+    VALUES (uploader_id, file_name);
+    SELECT LAST_INSERT_ID();
 END //
 DELIMITER ;

@@ -25,6 +25,17 @@ class ThreadModel extends Model {
         return $results[0];
     }
 
+    public static function createThread($board_dir, 
+        $thread_name, $content, $uploader_name, $file_id) {
+        $statement = Model::getDB()->prepare("CALL createThread(?, ?, ?, ?, ?)");
+        $statement->bindParam(1, $board_dir, PDO::PARAM_STR, 12);
+        $statement->bindParam(2, $thread_name, PDO::PARAM_STR, 1024);
+        $statement->bindParam(3, $content, PDO::PARAM_STR, 8192);
+        $statement->bindParam(4, $uploader_name, PDO::PARAM_STR, 36);
+        $statement->bindParam(5, $file_id, PDO::PARAM_INT);
+        $statement->execute();
+    }
+
 }
 
 ?>

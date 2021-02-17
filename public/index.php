@@ -25,8 +25,7 @@ use Dalton\ThreeLeaf\Models\BoardModel;
     <link rel='shortcut icon' type='image/x-icon' href='favicon.ico' />
     <link rel='stylesheet' type='text/css' href='css/style.css' />
     <script type='text/javascript' src='js/global.js' />
-    <script src='https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
-    <script src="https://www.google.com/recaptcha/api.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
 </head>
 <body>
     <?php 

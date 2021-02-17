@@ -31,20 +31,3 @@ if (isset($args['error'])) {
         </form>
     </div>
 </div>
-<script>
-    $(document).ready(() => {
-        $("#threadSubmit").click(() => {
-            $("#username-error-text").css('display', 'none');
-            $("#password-error-text").css('display', 'none');
-            let local_username = $('#username').prop('files')[0];
-            let local_password = $("#password").val();
-            $.post("index.php/form?something", {
-                username: local_username,
-                password: local_password,
-            }, (data) => {
-                $("#loginForm")[0].reset();
-            }, (error) => {
-            });
-        });
-    });
-</script>

@@ -34,7 +34,33 @@ hr {
     margin-bottom: 1em;
 }
 
-input {
+a {
+    text-decoration: none;
+}
+
+textarea {
+    display: block;
+    width: 100%;
+    font-size: 18px;
+    line-height: 14px * 2;
+    font-family: Verdana, Geneva, Tahoma, sans-serif;
+    margin-bottom: 14px * 2;
+    border: none;
+    border-bottom: 5px solid black;
+    background: #ebcfd4;
+    min-width: 250px;
+    padding-left: 5px;
+    outline: none;
+    color: black;
+    padding: 12px 0px;
+    padding-left: 0.2em;
+}
+
+textarea:focus {
+    border-bottom: 5px solid #e05f7b;
+}
+
+input[type='text'], input[type='password'] {
     display: block;
     width: 100%;
     font-size: 18px;
@@ -72,6 +98,27 @@ button {
 }
 
 button:hover {
+    background: rgba(0,0,0,1);
+    color: #e05f7b;
+    border: 1px solid rgba(0,0,0,1);
+}
+
+input[type='file'] {
+    display: block;
+    margin: 0 auto;
+    line-height: 14px * 2;
+    padding: 5px 20px;
+    background: #e05f7b;
+    letter-spacing: 2px;
+    transition: .2s all ease-in-out;
+    outline: none;
+    border: 1px solid rgba(0,0,0,1);
+    margin: 16px 0px;
+    margin-bottom: 8px;
+    font-family: 'Courier New', Courier, monospace;
+  }
+  
+input[type='file']:hover {
     background: rgba(0,0,0,1);
     color: #e05f7b;
     border: 1px solid rgba(0,0,0,1);
@@ -244,12 +291,13 @@ ul {
     height: 100%;
     overflow: auto;
     background-color: rgba(0, 0, 0, 0);
+    pointer-events: none;
 }
 
 #modal {
+    pointer-events: auto;
     display: none;
     position: absolute;
-    width: 300px;
     z-index: 3;
 }
 
@@ -342,3 +390,15 @@ ul {
     padding: 25px 50px;
 }
 /* End form styling. */
+
+/* Misc. */
+.post-thread-header-text {
+    text-decoration: none;
+    color: black;
+    cursor: pointer;
+}
+
+.post-thread-header-text:hover {
+    color: #147714;
+}
+/* End misc. */

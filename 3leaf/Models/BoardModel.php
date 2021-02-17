@@ -16,6 +16,16 @@ class BoardModel extends Model {
         return $results;
     }
 
+    public static function isBoardDirectoryValid($dir) {
+        $boards = BoardModel::getBoards();
+        foreach ($boards as $kv) {
+            if ($kv['directory'] == $dir) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static function getBoardIdFromDirectory($dir) {
         $statement = Model::getDB()->prepare('CALL getBoardIdFromDirectory(?, @board)');
         $statement->bindParam(1, $dir, PDO::PARAM_STR);

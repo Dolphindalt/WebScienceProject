@@ -4,9 +4,13 @@ namespace Dalton\ThreeLeaf\Controllers;
 
 require_once ROOT_PATH.'framework/Controller.php';
 require_once ROOT_PATH.'3leaf/Models/ThreadModel.php';
+require_once ROOT_PATH.'3leaf/Controllers/FileController.php';
+require_once ROOT_PATH.'3leaf/Models/BoardModel.php';
 
 use Dalton\ThreeLeaf\Models\ThreadModel;
+use Dalton\ThreeLeaf\Controllers\FileUpload;
 use Dalton\Framework\ControllerBase;
+use Dalton\ThreeLeaf\Models\BoardModel;
 
 class Threads extends ControllerBase {
 
@@ -15,16 +19,17 @@ class Threads extends ControllerBase {
         echo json_encode($boardThreads);
     }
 
-    public function createThreadFromFormTask() {
-        $image_data = $_POST['image'];
-        $thread_name = $_POST['name'];
-        $content = $_POST['comment'];
-
-        if (empty($image_data)) {
+    public function createThreadTask() {
+        $board_dir = $this->params['dir'];
+        if (!BoardModel::isBoardDirectoryValid($board_dir)) {
             http_response_code(400);
-            echo 'Image data required.';
+            echo 'Invalid board directory';
             die();
         }
+
+        echo print_r($_POST);
+        $thread_name = $_POST['name'];
+        $content = $_POST['comment'];
 
         if (empty($thread_name)) {
             http_response_code(400);
@@ -38,9 +43,17 @@ class Threads extends ControllerBase {
             die();
         }
 
+        $file_controller = new FileUpload();
+        $file_id = $file_controller->tryUploadFile();
+        if ($file_id == null) {
+            echo 'Failed to upload file.';
+            return;
+        }
+
         $content = nl2br($content);
         $thread_name = $this->strip_html_and_slashes_and_non_spaces($thread_name);
         $content = $this->strip_html_and_slashes_and_non_spaces($content);
+        ThreadModel::createThread($board_dir, $thread_name, $content, $_SESSION[USERNAME], $file_id);
     }
 
 }

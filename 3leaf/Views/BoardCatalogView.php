@@ -1,11 +1,17 @@
 <?php
-    $board = $args['board'];
-    $threads = $args['threads'];
-    $rootPosts = $args['root_posts'];
+
+use Dalton\Framework\View;
+
+$board = $args['board'];
+$threads = $args['threads'];
+$rootPosts = $args['root_posts'];
+
 ?>
 <h1 class='center'><?php echo $board['directory']; ?> - <?php echo $board['name']; ?></h1>
 <hr>
-<div id='modal-show'><h2>[Post new thread]</h2></div>
+<div class='center'>
+    <div id='modal-show'><h2 class='post-thread-header-text'>[Post new thread]</h2></div>
+</div>
 <hr>
 <div class='board-catalog-grid'>
     <?php
@@ -28,4 +34,4 @@
         }
     ?>
 </div>
-<?php require_once(ROOT_PATH.'3leaf/Views/CreateThreadModal.php'); ?>
+<?php View::render('CreateThreadModal.php', ['board' => $board]); ?>

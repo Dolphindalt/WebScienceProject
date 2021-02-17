@@ -4,10 +4,25 @@ function dragElement(elmnt) {
     var draggable = document.getElementById(elmnt.id + "-draggable");
     draggable.onmousedown = dragMouseDown;
 
+    console.log(getCookie("modal-status") == "open");
+    if (getCookie("modal-status") == "open") {
+        wrapper.style.display = "block";
+        elmnt.style.display = "block";
+        let x_style = getCookie("modal-x");
+        if (x_style != "") {
+            elmnt.style.left = x_style;
+        }
+        let y_style = getCookie("modal-y") 
+        if (y_style != "") {
+            elmnt.style.top = y_style;
+        }
+    }
+
     if (document.getElementById(elmnt.id + "-close")) {
         document.getElementById(elmnt.id + "-close").onclick = () => {
             wrapper.style.display = "none";
             elmnt.style.display = "none";
+            setCookie("modal-status", "closed")
         }
     }
 
@@ -15,6 +30,7 @@ function dragElement(elmnt) {
         document.getElementById(elmnt.id + "-show").onclick = () => {
             wrapper.style.display = "block";
             elmnt.style.display = "block";
+            setCookie("modal-status", "open");
         } 
     }
 
@@ -46,6 +62,8 @@ function dragElement(elmnt) {
         // stop moving when mouse button is released:
         document.onmouseup = null;
         document.onmousemove = null;
+        setCookie("modal-x", elmnt.style.left);
+        setCookie("modal-y", elmnt.style.top);
     }
 }
 
