@@ -1,12 +1,14 @@
 <?php
 
+if (!isset($_SESSION)) {
+    session_start();
+}
+
 if (!defined('ROOT_PATH')) {
     define('ROOT_PATH', dirname(__DIR__) . '/');
 }
 
 require_once ROOT_PATH.'config.php';
-
-session_start();
 
 // Because we cannot use composer class auto loading, 
 // we need to require classes to use them.
@@ -64,6 +66,18 @@ $router->add('register',
 $router->add('register',
     ['controller' => 'Dalton\ThreeLeaf\Controllers\Session', 
     'task' => 'processRegisterForm', 'method' => 'POST']);
+
+$router->add('logout', 
+    ['controller' => 'Dalton\ThreeLeaf\Controllers\Session', 
+    'task' => 'logout', 'method' => 'GET']);
+
+$router->add('login/welcome', 
+    ['controller' => 'Dalton\ThreeLeaf\Controllers\Session', 
+    'task' => 'welcomeLogin', 'method' => 'GET']);
+
+$router->add('register/welcome', 
+    ['controller' => 'Dalton\ThreeLeaf\Controllers\Session', 
+    'task' => 'welcomeRegister', 'method' => 'GET']);
 
 $router->execute($_SERVER['QUERY_STRING'], $_SERVER['REQUEST_METHOD']); 
 

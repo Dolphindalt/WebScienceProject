@@ -18,7 +18,7 @@ class UserModel extends Model {
         if (empty($results)) {
             return '';
         } else {
-            return $results[0];
+            return $results[0]['password'];
         }
     }
 

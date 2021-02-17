@@ -1,5 +1,9 @@
 <?php
 
+if (!isset($_SESSION)) {
+    session_start();
+}
+
 use Dalton\ThreeLeaf\Controllers\Sidenav;
 
 if (!defined('ROOT_PATH')) {

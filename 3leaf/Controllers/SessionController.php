@@ -12,6 +12,7 @@ use Dalton\Framework\View;
 use Dalton\ThreeLeaf\Models\UserModel;
 
 const HASH_ALGO = 'sha3-512';
+const WAS_WELCOMED = 'was_welcomed';
 
 class Session extends ControllerBase {
 
@@ -33,9 +34,9 @@ class Session extends ControllerBase {
 
         $password_check = UserModel::getPasswordFromUsername($username);
 
-        if ($password_check && $password == $password_check) {
+        if ($password_check != '' && $password == $password_check) {
             $this->setupSession($username);
-            echo 'Welcome ' . $_SESSION[USERNAME] . '!';
+            header('Location: index.php?login/welcome');
         } else {
             http_response_code(409);
             $this->error = 'Invalid username or password.';
@@ -66,7 +67,8 @@ class Session extends ControllerBase {
 
         $errString = UserModel::tryCreateUser($username, $password);
         if ($errString == '') {
-            echo 'Account created!';
+            $this->setupSession($username);
+            header('Location: index.php?register/welcome');
         } else {
             http_response_code(409);
             $this->error = $errString;
@@ -77,6 +79,29 @@ class Session extends ControllerBase {
 
     public function logoutTask() {
         $this->destroySession();
+        header('Location: index.php');
+    }
+
+    public function welcomeRegisterTask() {
+        if (!isset($_SESSION[WAS_WELCOMED])) {
+            $header = 'Welcome ' . $_SESSION[USERNAME] . '!';
+            $content = 'Please enjoy your stay.';
+            View::render('MessageView.php', ['header' => $header, 'content' => $content]);
+            $_SESSION[WAS_WELCOMED] = true;
+        } else {
+            header('Location: index.php');
+        }
+    }
+
+    public function welcomeLoginTask() {
+        if (!isset($_SESSION[WAS_WELCOMED])) {
+            $header =  'Account created!';
+            $content = 'Welcome to 3leaf ' . $_SESSION[USERNAME] . '! You are now logged in.';
+            View::render('MessageView.php', ['header' => $header, 'content' => $content]);
+            $_SESSION[WAS_WELCOMED] = true;
+        } else {
+            header('Location: index.php');
+        }
     }
 
     public function setupSession($username) {
