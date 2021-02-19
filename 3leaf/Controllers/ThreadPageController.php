@@ -33,8 +33,19 @@ class ThreadPage extends ControllerBase {
         }
 
         $posts = PostModel::fetchAllPostsFromThread($thread_id);
+        
+        $args = ['board' => $board, 'thread' => $thread, 'posts' => $posts];
+        if (array_key_exists('error', $this->params)) {
+            $args['error'] = $this->params['error'];
+        }
+        View::render('ThreadPageView.php', $args);
+    }
 
-        View::render('ThreadPageView.php', ['board' => $board, 'thread' => $thread, 'posts' => $posts]);
+    public function showThreadPageManual($dir, $thread, $error) {
+        $this->params['dir'] = $dir;
+        $this->params['thread'] = $thread;
+        $this->params['error'] = $error;
+        $this->showThreadPageTask();
     }
 
 }

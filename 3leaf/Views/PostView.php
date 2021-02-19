@@ -8,7 +8,7 @@ $post = $args['post'];
 ?>
 <script>
 function toggleVisibleByClick(elmnt1, elmnt2) {
-    let post_wrapper = document.getElementById("<?php echo str_pad($post['id'], 10, '0', STR_PAD_LEFT); ?>-wrapper");
+    let post_wrapper = document.getElementById("<?php echo 'p' . $post['id']; ?>-wrapper");
 
     elmnt1.onclick = () => {
         elmnt1.style.display = "none";
@@ -24,7 +24,7 @@ function toggleVisibleByClick(elmnt1, elmnt2) {
 }
 </script>
 
-<div class='post-wrapper' id='<?php echo str_pad($post['id'], 10, '0', STR_PAD_LEFT); ?>-wrapper'>
+<div class='post-wrapper' id='<?php echo 'p' . $post['id']; ?>-wrapper'>
     <?php
         if (array_key_exists('file_name', $post)) {
     ?>
@@ -36,7 +36,7 @@ function toggleVisibleByClick(elmnt1, elmnt2) {
     ?>
     <div class='post-content-wrapper'>
         <div class='post-header'>
-            <p class='info-text inline'>post no. <?php echo str_pad($post['id'], 10, '0', STR_PAD_LEFT); ?></p>
+            <p class='info-text inline'>post no. <?php echo $post['id']; ?></p>
             <h4 class='inline'><?php echo $thread['name']; ?></h4><br>
             <p class='posted-by-text inline'>by <?php echo $post['username'] ?> at <?php echo $post['time_created'] ?></p>
         </div>

@@ -34,7 +34,17 @@ class BoardPage extends ControllerBase {
             $root = PostModel::fetchRootPostFromThread($thread['id']);
             array_push($rootPosts, $root);
         }
-        View::render('BoardCatalogView.php', $args = ['board' => $board, 'threads' => $threads, 'root_posts' => $rootPosts]);
+        $args = ['board' => $board, 'threads' => $threads, 'root_posts' => $rootPosts, ];
+        if (array_key_exists('error', $this->params)) {
+            $args['error'] = $this->params['error'];
+        }
+        View::render('BoardCatalogView.php', $args);
+    }
+
+    public function showBoardCatalogWithError($dir, $error) {
+        $this->params['dir'] = $dir;
+        $this->params['error'] = $error;
+        $this->showBoardCatalogTask();
     }
 
 }

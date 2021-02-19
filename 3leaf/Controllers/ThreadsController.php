@@ -5,12 +5,16 @@ namespace Dalton\ThreeLeaf\Controllers;
 require_once ROOT_PATH.'framework/Controller.php';
 require_once ROOT_PATH.'3leaf/Models/ThreadModel.php';
 require_once ROOT_PATH.'3leaf/Controllers/FileController.php';
+require_once ROOT_PATH.'3leaf/Controllers/ThreadPageController.php';
+require_once ROOT_PATH.'3leaf/Controllers/BoardPageController.php';
 require_once ROOT_PATH.'3leaf/Models/BoardModel.php';
 
 use Dalton\ThreeLeaf\Models\ThreadModel;
 use Dalton\ThreeLeaf\Controllers\FileUpload;
 use Dalton\Framework\ControllerBase;
 use Dalton\ThreeLeaf\Models\BoardModel;
+use Dalton\ThreeLeaf\Controllers\ThreadPage;
+use Dalton\ThreeLeaf\Controllers\BoardPage;
 
 class Threads extends ControllerBase {
 
@@ -21,39 +25,47 @@ class Threads extends ControllerBase {
 
     public function createThreadTask() {
         $board_dir = $this->params['dir'];
-        if (!BoardModel::isBoardDirectoryValid($board_dir)) {
-            http_response_code(400);
-            echo 'Invalid board directory';
-            die();
+
+        if (!isset($_SESSION[LOGGED_IN])) {
+            $this->showErrorOnBoardCatalog($board_dir, 'You need to log in to make a post.');
         }
 
-        echo print_r($_POST);
+        if (!BoardModel::isBoardDirectoryValid($board_dir)) {
+            $this->showErrorOnBoardCatalog($board_dir, 'Invalid board directory.');
+        }
+
         $thread_name = $_POST['name'];
         $content = $_POST['comment'];
 
         if (empty($thread_name)) {
-            http_response_code(400);
-            echo 'Thread name required.';
-            die();
+            $this->showErrorOnBoardCatalog($board_dir, 'Thread name required.');
         }
 
         if (empty($content)) {
-            http_response_code(400);
-            echo 'Thread comment required.';
-            die();
+            $this->showErrorOnBoardCatalog($board_dir, $board_dir, 'Thread comment required.');
         }
 
         $file_controller = new FileUpload();
-        $file_id = $file_controller->tryUploadFile();
-        if ($file_id == null) {
-            echo 'Failed to upload file.';
-            return;
+        $results = $file_controller->tryUploadFile($_SESSION[USERNAME]);
+        if (array_key_exists('error', $results)) {
+            $this->showErrorOnBoardCatalog($board_dir, 'Failed to upload file.');
         }
 
+        $file_id = $results['id'];
         $content = nl2br($content);
         $thread_name = $this->strip_html_and_slashes_and_non_spaces($thread_name);
         $content = $this->strip_html_and_slashes_and_non_spaces($content);
-        ThreadModel::createThread($board_dir, $thread_name, $content, $_SESSION[USERNAME], $file_id);
+        $thread = ThreadModel::createThread($board_dir, $thread_name, $content, $_SESSION[USERNAME], $file_id);
+
+        $thread_page_controller = new ThreadPage([]);
+        $thread_page_controller->showThreadPageManual($board_dir, $thread['id'], null);
+    }
+
+    private function showErrorOnBoardCatalog($dir, $error) {
+        $board_page_controller = new BoardPage([]);
+        http_response_code(400);
+        $board_page_controller->showBoardCatalogWithError($dir, $error);
+        die();
     }
 
 }

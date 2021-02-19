@@ -82,7 +82,7 @@ class Session extends ControllerBase {
         header('Location: index.php');
     }
 
-    public function welcomeRegisterTask() {
+    public function welcomeLoginTask() {
         if (!isset($_SESSION[WAS_WELCOMED])) {
             $header = 'Welcome ' . $_SESSION[USERNAME] . '!';
             $content = 'Please enjoy your stay.';
@@ -93,7 +93,7 @@ class Session extends ControllerBase {
         }
     }
 
-    public function welcomeLoginTask() {
+    public function welcomeRegisterTask() {
         if (!isset($_SESSION[WAS_WELCOMED])) {
             $header =  'Account created!';
             $content = 'Welcome to 3leaf ' . $_SESSION[USERNAME] . '! You are now logged in.';

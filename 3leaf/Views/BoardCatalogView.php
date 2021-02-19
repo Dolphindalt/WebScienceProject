@@ -5,6 +5,8 @@ use Dalton\Framework\View;
 $board = $args['board'];
 $threads = $args['threads'];
 $rootPosts = $args['root_posts'];
+if (array_key_exists('error', $args))
+    $error = $args['error'];
 
 ?>
 <h1 class='center'><?php echo $board['directory']; ?> - <?php echo $board['name']; ?></h1>
@@ -24,7 +26,7 @@ $rootPosts = $args['root_posts'];
                 <a href='index.php?board/dir=r/thread=<?php echo $thread['id']; ?>'>
                     <img class='catalog-image' src='post_images/<?php echo $post['file_name']; ?>'/>
                 </a>
-                <p class='info-text'>thread no. <?php echo str_pad($thread['id'], 10, '0', STR_PAD_LEFT); ?></p>
+                <p class='info-text'>thread no. <?php echo $thread['id']; ?></p>
                 <p class='posted-by-text'>by <?php echo $post['username'] ?></p>
                 <h4><?php echo $thread['name']; ?></h4>
                 <p><?php echo $post['content']; ?></p>
@@ -34,4 +36,9 @@ $rootPosts = $args['root_posts'];
         }
     ?>
 </div>
-<?php View::render('CreateThreadModal.php', ['board' => $board]); ?>
+<?php 
+    $args = ['board' => $board];
+    if (isset($error))
+        $args['error'] = $error;
+    View::render('CreateThreadModal.php', $args); 
+?>

@@ -50,7 +50,7 @@ abstract class ControllerBase {
     public function strip_html_and_slashes_and_non_spaces($input) {
         $input = stripslashes($input);
         $input = htmlspecialchars($input);
-        $input = trim($input, ['\n', '\t', '\0', '\x0B', '\r']);
+        $input = trim($input, "\n\t\0\x0B\r");
         $input = rtrim($input);
         $input = ltrim($input);
         return $input;

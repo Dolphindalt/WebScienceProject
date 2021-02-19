@@ -3,6 +3,7 @@
 namespace Dalton\ThreeLeaf\Controllers;
 
 require_once ROOT_PATH.'framework/Controller.php';
+require_once ROOT_PATH.'3leaf/Models/FileModel.php';
 
 use Dalton\Framework\ControllerBase;
 use Dalton\ThreeLeaf\Models\FileModel;
@@ -17,31 +18,32 @@ class FileUpload extends ControllerBase {
         $this->file_directory = ROOT_PATH.'public/post_images/';
     }
 
-    public function tryUploadFile() {
+    public function tryUploadFile($uploader_name) {
+        $results = [];
         $img_file = $_FILES['image']['name'];
         $file_extension = pathinfo($img_file, PATHINFO_EXTENSION);
         if ($img_file == '') {
-            echo 'The image is required.';
-            return null;
+            $results['error'] = 'The image is required.';
+            return $results;
         } else if (!in_array($file_extension, VALID_EXTENSIONS)) {
-            echo 'Image type not supported.';
-            return null;
+            $results['error'] = 'Image type not supported.';
+            return $results;
         } else if (($_FILES['image']['size'] > 2000000)) {
-            echo 'Image size is larger than 2MB.';
-            return null;
+            $results['error'] = 'Image size is larger than 2MB.';
+            return $results;
         }
         // Generate a UUID to use as the file name.
         $file_name = uniqid() . '.' . $file_extension;
         $target = $this->file_directory . $file_name;
-        if (move_uploaded_file($img_file, $target)) {
-            $result = FileModel::insertFileRecord($file_name);
-            if ($result != '') {
+        if (move_uploaded_file($_FILES['image']['tmp_name'], $target)) {
+            $results = FileModel::insertFileRecord($file_name, $uploader_name);
+            if (!empty($results)) {
                 // Last inserted file id.
-                return $result;
+                return $results;
             }
         }
-        echo 'Something went wrong when uploading the file.';
-        return null;
+        $results['error'] = 'Something went wrong when uploading the file.';
+        return $results;
     }
 
 }

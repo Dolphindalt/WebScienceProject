@@ -2,6 +2,10 @@
 
 $board = $args['board'];
 
+if (isset($args['error'])) {
+    $error = $args['error'];
+}
+
 ?>
 <div id='modal-wrapper'>
     <div id='modal'>
@@ -16,6 +20,11 @@ $board = $args['board'];
                     <span><input class='form-input' type='text' name='name' id='name' placeholder='Thread name'/></span><br>
                     <span><textarea class='form-input' name='comment' id='comment' placeholder='Comment'></textarea></span><br>
                     <button id='threadSubmit' class='center'>Post</button>
+                    <?php
+                        if (isset($error)) {
+                            echo "<p class='error-text center'>$error</p>";
+                        }
+                    ?>
                 </form>
             </div>
         </div>

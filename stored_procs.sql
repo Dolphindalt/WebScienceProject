@@ -37,6 +37,8 @@ CREATE OR REPLACE PROCEDURE getUserIdFromUsername(
 BEGIN
     SELECT
         users.id
+    FROM 
+        users
     WHERE
         LOWER(users.username) = LOWER(username)
     LIMIT 
@@ -135,11 +137,15 @@ CREATE OR REPLACE PROCEDURE createPost(
     IN board_directory varchar(12),
     IN thread_id int,
     IN content varchar(8192),
-    IN uploader_id int,
+    IN uploader_name varchar(36),
     IN file_id int)
 BEGIN
     DECLARE board_id int;
+    DECLARE uploader_id int;
     CALL getBoardIdFromDirectory(board_directory, board_id);
+    CALL getUserIdFromUsername(uploader_name, uploader_id);
+    INSERT INTO posts (thread_id, uploader_id, file_id, content, time_created) 
+    VALUES (thread_id, uploader_id, file_id, content, NOW());
 END //
 DELIMITER ;
 
@@ -153,13 +159,12 @@ CREATE OR REPLACE PROCEDURE createThread(
 BEGIN
     DECLARE board_id int;
     DECLARE thread_id int;
-    DECLARE uploader_id int;
     CALL getBoardIdFromDirectory(board_directory, board_id);
-    CALL getUserIdFromUsername(uploader_name, uploader_id);
     INSERT INTO threads (board_id, time_updated, post_count, image_count, name)
     VALUES (board_id, NOW(), 1, 1, name);
     SELECT LAST_INSERT_ID() INTO thread_id;
-    CALL createPost(board_directory, thread_id, content, uploader_id, file_id);
+    CALL createPost(board_directory, thread_id, content, uploader_name, file_id);
+    CALL selectThreadById(thread_id);
 END //
 DELIMITER ;
 
@@ -208,11 +213,21 @@ BEGIN
     DECLARE uploader_id int;
     SELECT 
         users.id
+    FROM 
+        users
     WHERE
-        users.username = uploader_name
-    INTO uploader_id;
+        LOWER(users.username) = LOWER(uploader_name)
+    INTO 
+        uploader_id;
     INSERT INTO files (uploader_id, file_name) 
     VALUES (uploader_id, file_name);
-    SELECT LAST_INSERT_ID();
+    SELECT
+        files.id
+    FROM
+        files
+    WHERE
+        file_name = files.file_name and uploader_id = uploader_id
+    LIMIT
+        1;
 END //
 DELIMITER ;
