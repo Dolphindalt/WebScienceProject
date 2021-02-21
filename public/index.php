@@ -24,8 +24,9 @@ use Dalton\ThreeLeaf\Models\BoardModel;
     <title>3leaf</title>
     <link rel='shortcut icon' type='image/x-icon' href='favicon.ico' />
     <link rel='stylesheet' type='text/css' href='css/style.css' />
-    <script type='text/javascript' src='js/global.js' />
-    <script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> 
+    <script type='text/javascript' src='js/global.js'/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script> 
 </head>
 <body>
     <?php 

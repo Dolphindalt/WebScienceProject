@@ -4,7 +4,6 @@ function dragElement(elmnt) {
     var draggable = document.getElementById(elmnt.id + "-draggable");
     draggable.onmousedown = dragMouseDown;
 
-    console.log(getCookie("modal-status") == "open");
     if (getCookie("modal-status") == "open") {
         wrapper.style.display = "block";
         elmnt.style.display = "block";
@@ -87,4 +86,23 @@ function getCookie(cname) {
         }
     }
     return "";
+}
+
+function mysqlGmtStrToJSDate(str) {
+    var t = str.split(/[- :]/);
+    // Apply each element to the Date function
+    return new Date(t[0], t[1]-1, t[2], t[3], t[4], t[5]);
+}
+
+function mysqlGmtStrToJSLocal(str) {
+    // first create str to Date object
+    var g = mysqlGmtStrToJSDate(str);
+    return new Date(g.getTime() - ( g.getTimezoneOffset() * 60000 ));
+}
+
+function onPostIDClick(clicked_elmnt) {
+    let elm_id = clicked_elmnt.id;
+    let post_id = elm_id.substring(1, elm_id.length);
+    $('#comment').val($('#comment').val() + '>>' + post_id + '\n');
+    document.getElementById("modal-show").onclick();
 }

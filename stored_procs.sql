@@ -252,3 +252,26 @@ BEGIN
         1;
 END //
 DELIMITER ;
+
+DELIMITER //
+CREATE OR REPLACE PROCEDURE getRepliesToPost(
+    IN parent_post_id int)
+BEGIN
+    SELECT
+        post_replies.reply_post_id
+    FROM
+        post_replies
+    WHERE 
+        post_replies.parent_post_id = parent_post_id;
+END //
+DELIMITER ;
+
+DELIMITER //
+CREATE OR REPLACE PROCEDURE createPostReplyRecord(
+    IN parent_post_id int,
+    IN reply_post_id int)
+BEGIN
+    INSERT INTO post_replies (parent_post_id, reply_post_id) 
+    VALUES (parent_post_id, reply_post_id);
+END //
+DELIMITER ;

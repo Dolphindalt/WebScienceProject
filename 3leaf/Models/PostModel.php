@@ -49,6 +49,21 @@ class PostModel extends Model {
         return $results[0]['LAST_INSERT_ID()'];
     }
 
+    public static function getRepliesToPost($post_id) {
+        $statement = Model::getDB()->prepare("CALL getRepliesToPost(?)");
+        $statement->bindParam(1, $post_id, PDO::PARAM_INT);
+        $statement->execute();
+        $results = $statement->fetchAll(PDO::FETCH_ASSOC);
+        return $results;
+    }
+
+    public static function addReplyToPost($parent_post_id, $reply_post_id) {
+        $statement = Model::getDB()->prepare("CALL createPostReplyRecord(?, ?)");
+        $statement->bindParam(1, $parent_post_id, PDO::PARAM_INT);
+        $statement->bindParam(2, $reply_post_id, PDO::PARAM_INT);
+        $statement->execute();
+    }
+
 }
 
 ?>

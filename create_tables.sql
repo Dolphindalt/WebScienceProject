@@ -49,6 +49,8 @@ INSERT INTO boards (name, directory) VALUES ("Video Games", "vc");
 INSERT INTO boards (name, directory) VALUES ("Technology", "tch");
 INSERT INTO boards (name, directory) VALUES ("Random", "r");
 INSERT INTO boards (name, directory) VALUES ("Minecraft", "mc");
+INSERT INTO boards (name, directory) VALUES ("Crypto", "c");
+INSERT INTO boards (name, directory) VALUES ("Mathematics", "math");
 
 CREATE TABLE threads (
     id int NOT NULL AUTO_INCREMENT,
@@ -86,9 +88,9 @@ VALUES (2, 1, 2, "    A friend of mine put flock on his car's dashboard and can'
 
 CREATE TABLE post_replies (
     id int NOT NULL AUTO_INCREMENT,
-    root_post_id int NOT NULL,
+    parent_post_id int NULL,
     reply_post_id int NOT NULL,
-    FOREIGN KEY(root_post_id) REFERENCES posts(id),
+    FOREIGN KEY(parent_post_id) REFERENCES posts(id),
     FOREIGN KEY(reply_post_id) REFERENCES posts(id),
     PRIMARY KEY(id)
 );

@@ -178,6 +178,15 @@ input[type='file']:hover {
     margin-right: auto;
     vertical-align: middle;
 }
+
+.text-link {
+    text-decoration: underline;
+    color: #0000EE;
+}
+
+.text-link:visited {
+    color: #0000EE;
+}
 /* End misc globals. */
 
 /* Link header style. */
@@ -242,6 +251,19 @@ input[type='file']:hover {
     padding: 6px 8px 6px 16px;
     text-decoration: none;
     display: block;
+    font-size: 16px;
+    color: #551A8B;
+}
+
+span a {
+    text-decoration: none;
+    font-size: 16px;
+    color: #551A8B;
+}
+
+.post-id:hover {
+    color: #551A8B;
+    cursor: pointer;
 }
 
 ul {
@@ -319,7 +341,7 @@ ul {
 }
 
 #modal-show {
-    
+    width: auto;
 }
 /* End modal styling. */
 

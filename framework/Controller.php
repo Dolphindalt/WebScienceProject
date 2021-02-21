@@ -62,7 +62,7 @@ abstract class ControllerBase {
     }
 
     public function strip_html($input) {
-        $input = $this->strip_slashes_and_non_spaces($input);
+        $input = htmlspecialchars($input);
         return $input;
     }
 }
