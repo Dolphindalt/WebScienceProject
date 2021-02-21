@@ -54,6 +54,10 @@ $router->add('board/{dir=[a-zA-Z]*}/{thread=\d*}',
     ['controller' => 'Dalton\ThreeLeaf\Controllers\ThreadPage',
     'task' => 'showThreadPage', 'method' => 'GET']);
 
+    $router->add('board/{dir=[a-zA-Z]*}/{thread=\d*}', 
+    ['controller' => 'Dalton\ThreeLeaf\Controllers\Threads',
+    'task' => 'createPostOnThread', 'method' => 'POST']);
+
 $router->add('threads/{board=[a-zA-Z]*}', 
     ['controller' => 'Dalton\ThreeLeaf\Controllers\Threads', 
     'task' => 'listFromBoard', 'method' => 'GET']);

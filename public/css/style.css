@@ -348,6 +348,10 @@ ul {
 /* End board catalog styles. */
 
 /* Post styling. */
+.post-margins {
+    margin: 0.2em;
+}
+
 .post-wrapper {
     height: inherit;
     width: inherit;

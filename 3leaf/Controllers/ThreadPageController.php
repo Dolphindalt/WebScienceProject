@@ -41,9 +41,9 @@ class ThreadPage extends ControllerBase {
         View::render('ThreadPageView.php', $args);
     }
 
-    public function showThreadPageManual($dir, $thread, $error) {
+    public function showThreadPageWithError($dir, $thread_id, $error) {
         $this->params['dir'] = $dir;
-        $this->params['thread'] = $thread;
+        $this->params['thread'] = $thread_id;
         $this->params['error'] = $error;
         $this->showThreadPageTask();
     }

@@ -11,7 +11,7 @@ class View {
         $file = dirname(__DIR__) . "/3leaf/Views/$view";
 
         if (is_readable($file)) {
-            include_once $file;
+            require $file;
         } 
         else {
             throw new \Exception("Failed to find view: " . $file);

@@ -7,7 +7,7 @@ if (isset($args['error'])) {
 ?>
 <div id='modal-wrapper'>
     <div id='modal'>
-        <div class='container-wrapper'>
+        <div class='container-wrapper' style="width: inherit !important;">
             <div class='container-header' id='modal-draggable'>
                 <h2 class='inline'>Create Post</h2>
                 <div class='inline' id='modal-close'>X</div>

@@ -104,7 +104,27 @@ BEGIN
     WHERE 
         thread_id = posts.thread_id
     ORDER BY
-        posts.time_created DESC;
+        posts.time_created ASC;
+END //
+DELIMITER ;
+
+DELIMITER //
+CREATE OR REPLACE PROCEDURE selectPostIDsByPostID(
+    IN post_id int)
+BEGIN
+    SELECT
+        posts.id,
+        posts.thread_id,
+        boards.directory
+    FROM
+        posts
+    LEFT JOIN
+        threads ON threads.id = posts.thread_id
+    LEFT JOIN 
+        boards ON threads.board_id = boards.id
+    WHERE
+        posts.id = post_id
+    LIMIT 1;
 END //
 DELIMITER ;
 
@@ -127,7 +147,7 @@ BEGIN
     WHERE 
         thread_id = posts.thread_id
     ORDER BY
-        posts.time_created DESC
+        posts.time_created ASC
     LIMIT 1;
 END //
 DELIMITER ;
@@ -146,6 +166,7 @@ BEGIN
     CALL getUserIdFromUsername(uploader_name, uploader_id);
     INSERT INTO posts (thread_id, uploader_id, file_id, content, time_created) 
     VALUES (thread_id, uploader_id, file_id, content, NOW());
+    SELECT LAST_INSERT_ID();
 END //
 DELIMITER ;
 

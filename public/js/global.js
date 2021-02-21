@@ -22,7 +22,7 @@ function dragElement(elmnt) {
         document.getElementById(elmnt.id + "-close").onclick = () => {
             wrapper.style.display = "none";
             elmnt.style.display = "none";
-            setCookie("modal-status", "closed")
+            setCookie("modal-status", "closed");
         }
     }
 
