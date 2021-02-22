@@ -162,10 +162,39 @@ CREATE OR REPLACE PROCEDURE createPost(
 BEGIN
     DECLARE board_id int;
     DECLARE uploader_id int;
+    DECLARE post_count int;
+
     CALL getBoardIdFromDirectory(board_directory, board_id);
     CALL getUserIdFromUsername(uploader_name, uploader_id);
+
+    # Insertion of the post data.
     INSERT INTO posts (thread_id, uploader_id, file_id, content, time_created) 
     VALUES (thread_id, uploader_id, file_id, content, NOW());
+
+    # Update the post counter.
+    UPDATE threads SET threads.post_count = threads.post_count + 1 WHERE threads.id = thread_id;
+
+    # Update the image counter.
+    IF file_id IS NOT NULL THEN 
+        UPDATE threads SET threads.image_count = threads.image_count + 1 WHERE threads.id = thread_id;
+    END IF;
+    
+    SELECT
+        threads.post_count
+    FROM
+        threads
+    WHERE
+        threads.id = thread_id
+    LIMIT
+        1
+    INTO
+        post_count;
+
+    # We stop bumping the thread to the front if there are 10 replies.
+    IF post_count < 10 THEN
+        UPDATE threads SET threads.time_updated = NOW() WHERE threads.id = thread_id;
+    END IF;
+
     SELECT LAST_INSERT_ID();
 END //
 DELIMITER ;
@@ -273,5 +302,33 @@ CREATE OR REPLACE PROCEDURE createPostReplyRecord(
 BEGIN
     INSERT INTO post_replies (parent_post_id, reply_post_id) 
     VALUES (parent_post_id, reply_post_id);
+END //
+DELIMITER ;
+
+DELIMITER //
+CREATE OR REPLACE PROCEDURE fetchActiveThreadsFromUser(
+    IN username varchar(36))
+BEGIN
+    DECLARE user_id int;
+    SELECT 
+        users.id
+    FROM 
+        users
+    WHERE
+        LOWER(users.username) = LOWER(username)
+    INTO 
+        user_id;
+    SELECT DISTINCT
+        threads.name,
+        threads.id,
+        boards.directory
+    FROM
+        threads
+    LEFT JOIN
+        boards ON boards.id = threads.board_id
+    LEFT JOIN
+        posts ON posts.thread_id = threads.id
+    WHERE
+        posts.uploader_id = user_id;
 END //
 DELIMITER ;

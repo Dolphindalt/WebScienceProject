@@ -26,10 +26,10 @@ if (array_key_exists('error', $args))
                 <a href='index.php?board/dir=r/thread=<?php echo $thread['id']; ?>'>
                     <img class='catalog-image' src='post_images/<?php echo $post['file_name']; ?>'/>
                 </a>
+                <p>R: <?php echo $thread['post_count']; ?> I: <?php echo $thread['image_count']; ?></p>
                 <p class='info-text'>thread no. <?php echo $thread['id']; ?></p>
                 <p class='posted-by-text'>by <?php echo $post['username'] ?></p>
                 <h4><?php echo $thread['name']; ?></h4>
-                <p><?php echo $post['content']; ?></p>
             </div>
 
         <?php

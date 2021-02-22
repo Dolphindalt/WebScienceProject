@@ -21,12 +21,12 @@ $callback = function($matches) use ($post_ids) {
         return '<a class="text-link" href=\'#p' . $digits . '\'>'. $carrots . $digits . '</a>';
     }
 
-    $post = PostModel::selectPostIDsFromPostID($digits);
-    if ($post == null) {
+    $post_reply = PostModel::selectPostIDsFromPostID($digits);
+    if ($post_reply == null) {
         return '<a class="text-link style=\'text-decoration: line-through;\'>'. $carrots . $digits . '</a>';
     }
 
-    return "<a class='text-link' href='index.php?board/dir=" . $post['directory'] . "/thread=" . $post['thread_id'] . "#p" . $digits . "'>". $carrots . $digits . "</a>";
+    return "<a class='text-link' href='index.php?board/dir=" . $post_reply['directory'] . "/thread=" . $post_reply['thread_id'] . "#p" . $digits . "'>". $carrots . $digits . "</a>";
 };
 
 $post['content'] = preg_replace_callback('/(&gt;&gt;)([0-9]+)/', $callback, $post['content']);
@@ -42,7 +42,7 @@ foreach ($replies_to_post as $reply) {
 function toggleVisibleByClick(elmnt1, elmnt2) {
     if (elmnt1 == null || elmnt2 == null)
         return;
-    let post_wrapper = document.getElementById("<?php echo 'p' . $post['id']; ?>-wrapper");
+    let post_wrapper = document.getElementById("<?php echo 'p' . $post['id']; ?>");
 
     elmnt1.onclick = () => {
         elmnt1.style.display = "none";
@@ -59,7 +59,7 @@ function toggleVisibleByClick(elmnt1, elmnt2) {
 </script>
 
 <div class='post-margins'>
-    <div class='post-wrapper' id='<?php echo 'p' . $post['id']; ?>-wrapper'>
+    <div class='post-wrapper' id='<?php echo 'p' . $post['id']; ?>'>
         <?php
             if (array_key_exists('file_name', $post) && $post['file_name'] != null) {
         ?>
@@ -71,7 +71,7 @@ function toggleVisibleByClick(elmnt1, elmnt2) {
         ?>
         <div class='post-content-wrapper'>
             <div class='post-header'>
-                <p id="p<?php echo $post['id']; ?>" class='info-text inline post-id' onclick='onPostIDClick(this)'>post no. <?php echo $post['id']; ?></p>
+                <p class='info-text inline post-id' onclick='onPostIDClick(this)'>post no. <?php echo $post['id']; ?></p>
                 <?php if (isset($thread)) { ?>
                     <h4 class='inline'><?php echo $thread['name']; ?></h4><br>
                 <?php } ?>
@@ -83,11 +83,11 @@ function toggleVisibleByClick(elmnt1, elmnt2) {
                                 echo ' ';
                                 echo '<a class="text-link" href=\'#p' . $reply_id . '\'>>>' . $reply_id . '</a>';
                             } else {
-                                $post = PostModel::selectPostIDsFromPostID($reply_id);
-                                if ($post == null) {
+                                $post_reply = PostModel::selectPostIDsFromPostID($reply_id);
+                                if ($post_reply == null) {
                                     echo '<a class="text-link style=\'text-decoration: line-through;\'>>>' . $reply_id . '</a>';
                                 } else {
-                                    echo "<a class='text-link' href='index.php?board/dir=" . $post['directory'] . "/thread=" . $post['thread_id'] . "#p" . $reply_id . "'>>>" . $reply_id . "</a>";
+                                    echo "<a class='text-link' href='index.php?board/dir=" . $post_reply['directory'] . "/thread=" . $post_reply['thread_id'] . "#p" . $reply_id . "'>>>" . $reply_id . "</a>";
                                 }
                             }
                         }

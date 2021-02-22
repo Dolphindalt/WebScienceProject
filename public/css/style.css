@@ -187,6 +187,10 @@ input[type='file']:hover {
 .text-link:visited {
     color: #0000EE;
 }
+
+.text-link:target {
+    background-color: #e05f7b;
+}
 /* End misc globals. */
 
 /* Link header style. */
