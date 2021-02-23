@@ -9,18 +9,18 @@ DROP TABLE IF EXISTS users;
 DROP TABLE IF EXISTS passwords;
 
 CREATE TABLE passwords (
-    id int NOT NULL AUTO_INCREMENT,
-    password varchar(255) NOT NULL,
+    id INT NOT NULL AUTO_INCREMENT,
+    password VARCHAR(255) NOT NULL,
     PRIMARY KEY(id)
 );
 
 INSERT INTO passwords (password) VALUES ("bruh");
 
 CREATE TABLE users (
-    id int NOT NULL AUTO_INCREMENT,
-    password_id int NOT NULL,
-    username varchar(36) NOT NULL UNIQUE,
-    role int NOT NULL DEFAULT 0, # 0 - normal user, 1 - moderator
+    id INT NOT NULL AUTO_INCREMENT,
+    password_id INT NOT NULL,
+    username VARCHAR(36) NOT NULL UNIQUE,
+    role INT NOT NULL DEFAULT 0, # 0 - normal user, 1 - moderator
     FOREIGN KEY(password_id) REFERENCES passwords(id),
     PRIMARY KEY(id)
 );
@@ -28,9 +28,9 @@ CREATE TABLE users (
 INSERT INTO users (password_id, username) VALUES (1, "Daltondalt");
 
 CREATE TABLE files (
-    id int NOT NULL AUTO_INCREMENT,
-    uploader_id int NOT NULL,
-    file_name varchar(40) NOT NULL UNIQUE,
+    id INT NOT NULL AUTO_INCREMENT,
+    uploader_id INT NOT NULL,
+    file_name VARCHAR(40) NOT NULL UNIQUE,
     FOREIGN KEY(uploader_id) REFERENCES users(id),
     PRIMARY KEY(id)
 );
@@ -39,28 +39,31 @@ INSERT INTO files (uploader_id, file_name) VALUES (1, "fdc9a303-b8e0-4c01-9455-4
 INSERT INTO files (uploader_id, file_name) VALUES (1, "844ca79d-5aab-438a-8abe-50edc6c8a947.jpg");
 
 CREATE TABLE boards (
-    id int NOT NULL AUTO_INCREMENT,
-    name varchar(36) NOT NULL UNIQUE,
-    directory varchar(12) NOT NULL UNIQUE,
+    id INT NOT NULL AUTO_INCREMENT,
+    name VARCHAR(36) NOT NULL UNIQUE,
+    directory VARCHAR(12) NOT NULL UNIQUE,
+    post_limit INT NOT NULL DEFAULT 10,
+    thread_limit INT NOT NULL DEFAULT 10,
+    archive_limit INT NOT NULL DEFAULT 10,
     PRIMARY KEY(id)
 );
 
-INSERT INTO boards (name, directory) VALUES ("Crypto", "c");
-INSERT INTO boards (name, directory) VALUES ("Mathematics", "math");
-INSERT INTO boards (name, directory) VALUES ("Minecraft", "mc");
-INSERT INTO boards (name, directory) VALUES ("Movies", "mv");
-INSERT INTO boards (name, directory) VALUES ("Random", "r");
-INSERT INTO boards (name, directory) VALUES ("Technology", "tch");
-INSERT INTO boards (name, directory) VALUES ("Video Games", "vc");
+INSERT INTO boards (name, directory, post_limit, thread_limit, archive_limit) VALUES ("Crypto", "c", 10, 10, 10);
+INSERT INTO boards (name, directory, post_limit, thread_limit, archive_limit) VALUES ("Mathematics", "math", 10, 10, 10);
+INSERT INTO boards (name, directory, post_limit, thread_limit, archive_limit) VALUES ("Minecraft", "mc", 10, 10, 10);
+INSERT INTO boards (name, directory, post_limit, thread_limit, archive_limit) VALUES ("Movies", "mv", 10, 10, 10);
+INSERT INTO boards (name, directory, post_limit, thread_limit, archive_limit) VALUES ("Random", "r", 10, 10, 10);
+INSERT INTO boards (name, directory, post_limit, thread_limit, archive_limit) VALUES ("Technology", "tch", 10, 10, 10);
+INSERT INTO boards (name, directory, post_limit, thread_limit, archive_limit) VALUES ("Video Games", "vc", 10, 10, 10);
 
 CREATE TABLE threads (
-    id int NOT NULL AUTO_INCREMENT,
-    board_id int NOT NULL,
+    id INT NOT NULL AUTO_INCREMENT,
+    board_id INT NOT NULL,
     time_updated TIMESTAMP,
-    post_count int NOT NULL,
-    image_count int NOT NULL,
-    name varchar(1024) NOT NULL,
-    uploader_id int NOT NULL,
+    post_count INT NOT NULL,
+    image_count INT NOT NULL,
+    name VARCHAR(1024) NOT NULL,
+    uploader_id INT NOT NULL,
     is_archived bool NOT NULL DEFAULT 0,
     FOREIGN KEY(board_id) REFERENCES boards(id),
     FOREIGN KEY(uploader_id) REFERENCES users(id),
@@ -73,11 +76,11 @@ INSERT INTO threads (board_id, time_updated, post_count, image_count, name, uplo
 VALUES (5, "1970-01-01 00:00:01", 1, 1, "How to remove flock material from car dashboard", 1, 0);
 
 CREATE TABLE posts (
-    id int NOT NULL AUTO_INCREMENT,
-    thread_id int NOT NULL,
-    uploader_id int NOT NULL,
-    file_id int,
-    content varchar(8192),
+    id INT NOT NULL AUTO_INCREMENT,
+    thread_id INT NOT NULL,
+    uploader_id INT NOT NULL,
+    file_id INT,
+    content VARCHAR(8192),
     time_created TIMESTAMP,
     FOREIGN KEY(thread_id) REFERENCES threads(id),
     FOREIGN KEY(uploader_id) REFERENCES users(id),
@@ -91,9 +94,9 @@ INSERT INTO posts (thread_id, uploader_id, file_id, content, time_created)
 VALUES (2, 1, 2, "A friend of mine put flock on his car's dashboard and can't seem to get it off any of you know how to?", NOW());
 
 CREATE TABLE post_replies (
-    id int NOT NULL AUTO_INCREMENT,
-    parent_post_id int NULL,
-    reply_post_id int NOT NULL,
+    id INT NOT NULL AUTO_INCREMENT,
+    parent_post_id INT NULL,
+    reply_post_id INT NOT NULL,
     FOREIGN KEY(parent_post_id) REFERENCES posts(id),
     FOREIGN KEY(reply_post_id) REFERENCES posts(id),
     PRIMARY KEY(id)

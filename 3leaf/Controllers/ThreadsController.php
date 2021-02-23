@@ -83,7 +83,8 @@ class Threads extends ControllerBase {
             die();
         }
 
-        if (!ThreadModel::getThread($thread_id)) {
+        $thread = ThreadModel::getThread($thread_id);
+        if (!$thread) {
             http_response_code(404);
             View::render('MessageView.php', ['header' => 'Thread not found', 'content' => 'Invalid thread id.']);
             die();
@@ -91,6 +92,10 @@ class Threads extends ControllerBase {
 
         if (!isset($_SESSION[LOGGED_IN])) {
             $this->showErrorOnThreadPage($board_dir, $thread_id, 'You need to log in to make a post.');
+        }
+
+        if ($thread['is_archived']) {
+            $this->showErrorOnThreadPage($board_dir, $thread_id, 'You cannot post on an archived thread.');
         }
 
         if (empty($content)) {

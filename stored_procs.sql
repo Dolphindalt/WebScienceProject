@@ -2,8 +2,8 @@ USE three_leaf;
 
 DELIMITER //
 CREATE OR REPLACE PROCEDURE getBoardIdFromDirectory(
-    IN board_directory varchar(12),
-    OUT board_id int)
+    IN board_directory VARCHAR(12),
+    OUT board_id INT)
 BEGIN
     SELECT
         boards.id
@@ -18,7 +18,7 @@ DELIMITER ;
 
 DELIMITER //
 CREATE OR REPLACE PROCEDURE getBoardFromDirectory(
-    IN board_directory varchar(12))
+    IN board_directory VARCHAR(12))
 BEGIN
     SELECT
         boards.directory,
@@ -32,8 +32,8 @@ DELIMITER ;
 
 DELIMITER //
 CREATE OR REPLACE PROCEDURE getUserIdFromUsername(
-    IN username varchar(36),
-    OUT user_id int)
+    IN username VARCHAR(36),
+    OUT user_id INT)
 BEGIN
     SELECT
         users.id
@@ -50,10 +50,12 @@ DELIMITER ;
 
 DELIMITER //
 CREATE OR REPLACE PROCEDURE selectThreadsFromBoard(
-    IN board_directory varchar(12))
+    IN board_directory VARCHAR(12))
 BEGIN
     DECLARE board_id INT;
+    DECLARE board_thread_limit INT;
     CALL getBoardIdFromDirectory(board_directory, board_id);
+    SELECT boards.thread_limit FROM boards WHERE boards.id = board_id INTO board_thread_limit;
     SELECT
         threads.id,
         threads.post_count,
@@ -67,13 +69,13 @@ BEGIN
     ORDER BY
         threads.time_updated DESC
     LIMIT
-        10;
+        board_thread_limit;
 END //
 DELIMITER ;
 
 DELIMITER //
 CREATE OR REPLACE PROCEDURE selectArchivedThreadsFromBoard(
-    IN board_directory varchar(12))
+    IN board_directory VARCHAR(12))
 BEGIN
     DECLARE board_id INT;
     CALL getBoardIdFromDirectory(board_directory, board_id);
@@ -89,7 +91,7 @@ BEGIN
         board_id = threads.board_id
     ORDER BY
         threads.time_updated DESC
-    LIMIT # This is awful but MySQL suggests we use a cap so I would rather use 500 than max int.
+    LIMIT # This is awful but MySQL suggests we use a cap so I would rather use 500 than max INT.
           # Threads should not live very long anyways so the archive will not grow large.
           # If not, then we just do not show old archived threads.
         500 OFFSET 10;
@@ -98,7 +100,7 @@ DELIMITER ;
 
 DELIMITER //
 CREATE OR REPLACE PROCEDURE selectThreadById(
-    IN thread_id int)
+    IN thread_id INT)
 BEGIN
     SELECT
         threads.id,
@@ -116,7 +118,7 @@ DELIMITER ;
 
 DELIMITER //
 CREATE OR REPLACE PROCEDURE selectPostsFromThread(
-    IN thread_id varchar(36))
+    IN thread_id VARCHAR(36))
 BEGIN
     SELECT
         posts.id,
@@ -139,7 +141,7 @@ DELIMITER ;
 
 DELIMITER //
 CREATE OR REPLACE PROCEDURE selectPostIDsByPostID(
-    IN post_id int)
+    IN post_id INT)
 BEGIN
     SELECT
         posts.id,
@@ -159,7 +161,7 @@ DELIMITER ;
 
 DELIMITER //
 CREATE OR REPLACE PROCEDURE selectRootPostFromThread(
-    IN thread_id varchar(36))
+    IN thread_id VARCHAR(36))
 BEGIN
     SELECT
         posts.id,
@@ -183,18 +185,26 @@ DELIMITER ;
 
 DELIMITER //
 CREATE OR REPLACE PROCEDURE createPost(
-    IN board_directory varchar(12),
-    IN thread_id int,
-    IN content varchar(8192),
-    IN uploader_name varchar(36),
-    IN file_id int)
-BEGIN
-    DECLARE board_id int;
-    DECLARE uploader_id int;
-    DECLARE post_count int;
+    IN board_directory VARCHAR(12),
+    IN thread_id INT,
+    IN content VARCHAR(8192),
+    IN uploader_name VARCHAR(36),
+    IN file_id INT)
+proc_label: BEGIN
+    DECLARE board_id INT;
+    DECLARE board_post_limit INT;
+    DECLARE uploader_id INT;
+    DECLARE post_count INT;
+
+    # If the thread is archived, we do not allow posting.
+    IF (SELECT threads.is_archived FROM threads WHERE thread_id = threads.id) = 1 THEN
+        LEAVE proc_label;
+    END IF;
 
     CALL getBoardIdFromDirectory(board_directory, board_id);
     CALL getUserIdFromUsername(uploader_name, uploader_id);
+
+    SELECT boards.post_limit FROM boards WHERE boards.id = board_id INTO board_post_limit;
 
     # Insertion of the post data.
     INSERT INTO posts (thread_id, uploader_id, file_id, content, time_created) 
@@ -219,8 +229,8 @@ BEGIN
     INTO
         post_count;
 
-    # We stop bumping the thread to the front if there are 10 replies.
-    IF post_count < 10 THEN
+    # We stop bumping the thread to the front if there are enough replies.
+    IF post_count < board_post_limit THEN
         UPDATE threads SET threads.time_updated = NOW() WHERE threads.id = thread_id;
     END IF;
 
@@ -230,15 +240,16 @@ DELIMITER ;
 
 DELIMITER //
 CREATE OR REPLACE PROCEDURE createThread(
-    IN board_directory varchar(12),
-    IN name varchar(1024),
-    IN content varchar(8192),
-    IN uploader_name varchar(36),
-    IN file_id int)
+    IN board_directory VARCHAR(12),
+    IN name VARCHAR(1024),
+    IN content VARCHAR(8192),
+    IN uploader_name VARCHAR(36),
+    IN file_id INT)
 BEGIN
-    DECLARE board_id int;
-    DECLARE thread_id int;
-    DECLARE uploader_id int;
+    DECLARE board_id INT;
+    DECLARE board_thread_limit INT;
+    DECLARE thread_id INT;
+    DECLARE uploader_id INT;
     SELECT 
         users.id
     FROM 
@@ -252,15 +263,16 @@ BEGIN
     VALUES (board_id, NOW(), 1, 1, name, uploader_id);
     SELECT LAST_INSERT_ID() INTO thread_id;
     CALL createPost(board_directory, thread_id, content, uploader_name, file_id);
-    # Archive the 11th thread if it exists. This is the thread that slid off the page.
-    UPDATE threads SET threads.is_archived = 1 WHERE threads.id = (SELECT threads.id FROM threads LIMIT 1 OFFSET 10);
+    # Archive the sliding thread if it exists. This is the thread that slid off the page.
+    SELECT boards.thread_limit FROM boards WHERE boards.id = board_id INTO board_thread_limit;
+    UPDATE threads SET threads.is_archived = 1 WHERE threads.id = (SELECT threads.id FROM threads LIMIT 1 OFFSET board_thread_limit);
     CALL selectThreadById(thread_id);
 END //
 DELIMITER ;
 
 DELIMITER //
 CREATE OR REPLACE PROCEDURE findPasswordEntryForUsername(
-    IN username varchar(36))
+    IN username VARCHAR(36))
 BEGIN
     SELECT
         passwords.password
@@ -276,9 +288,9 @@ DELIMITER ;
 
 DELIMITER //
 CREATE OR REPLACE PROCEDURE tryCreateUser(
-    IN username varchar(36),
-    IN password varchar(255),
-    OUT errorMessage varchar(255))
+    IN username VARCHAR(36),
+    IN password VARCHAR(255),
+    OUT errorMessage VARCHAR(255))
 proc_label: BEGIN
     IF (SELECT EXISTS (SELECT
         users.username
@@ -297,10 +309,10 @@ DELIMITER ;
 
 DELIMITER //
 CREATE OR REPLACE PROCEDURE insertFileRecord(
-    IN file_name varchar(40),
-    IN uploader_name varchar(36))
+    IN file_name VARCHAR(40),
+    IN uploader_name VARCHAR(36))
 BEGIN
-    DECLARE uploader_id int;
+    DECLARE uploader_id INT;
     SELECT 
         users.id
     FROM 
@@ -324,7 +336,7 @@ DELIMITER ;
 
 DELIMITER //
 CREATE OR REPLACE PROCEDURE getRepliesToPost(
-    IN parent_post_id int)
+    IN parent_post_id INT)
 BEGIN
     SELECT
         post_replies.reply_post_id
@@ -337,8 +349,8 @@ DELIMITER ;
 
 DELIMITER //
 CREATE OR REPLACE PROCEDURE createPostReplyRecord(
-    IN parent_post_id int,
-    IN reply_post_id int)
+    IN parent_post_id INT,
+    IN reply_post_id INT)
 BEGIN
     INSERT INTO post_replies (parent_post_id, reply_post_id) 
     VALUES (parent_post_id, reply_post_id);
@@ -347,9 +359,9 @@ DELIMITER ;
 
 DELIMITER //
 CREATE OR REPLACE PROCEDURE fetchActivePostsFromUser(
-    IN username varchar(36))
+    IN username VARCHAR(36))
 BEGIN
-    DECLARE user_id int;
+    DECLARE user_id INT;
     SELECT 
         users.id
     FROM 
@@ -381,13 +393,13 @@ DELIMITER ;
 
 DELIMITER //
 CREATE OR REPLACE PROCEDURE deleteThread(
-    IN thread_id int,
-    IN username varchar(36),
+    IN thread_id INT,
+    IN username VARCHAR(36),
     OUT did_delete bool)
 BEGIN
-    DECLARE user_id int;
-    DECLARE user_role int;
-    DECLARE thread_owner_id int;
+    DECLARE user_id INT;
+    DECLARE user_role INT;
+    DECLARE thread_owner_id INT;
     SET did_delete = 0;
     SELECT
         users.id,
@@ -417,13 +429,13 @@ DELIMITER ;
 
 DELIMITER //
 CREATE OR REPLACE PROCEDURE deletePost(
-    IN post_id int,
-    IN username varchar(36),
+    IN post_id INT,
+    IN username VARCHAR(36),
     OUT did_delete bool)
 BEGIN
-    DECLARE user_id int;
-    DECLARE user_role int;
-    DECLARE post_owner_id int;
+    DECLARE user_id INT;
+    DECLARE user_role INT;
+    DECLARE post_owner_id INT;
     SET did_delete = 0;
     SELECT
         users.id,
