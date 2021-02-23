@@ -9,6 +9,19 @@ use Dalton\Framework\Model;
 
 class UserModel extends Model {
 
+    public static function fetchPostsUserIsActiveIn($username) {
+        $username = strtolower($username);
+        $statement = Model::getDB()->prepare("CALL fetchActivePostsFromUser(?)");
+        $statement->bindParam(1, $username, PDO::PARAM_STR, 36);
+        $statement->execute();
+        $results = $statement->fetchAll(PDO::FETCH_ASSOC);
+        if (empty($results)) {
+            return null;
+        } else {
+            return $results;
+        }
+    }
+
     public static function getPasswordFromUsername($username) {
         $username = strtolower($username);
         $statement = Model::getDB()->prepare("CALL findPasswordEntryForUsername(?)");

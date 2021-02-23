@@ -28,7 +28,7 @@ if (array_key_exists('error', $args))
                 </a>
                 <p>R: <?php echo $thread['post_count']; ?> I: <?php echo $thread['image_count']; ?></p>
                 <p class='info-text'>thread no. <?php echo $thread['id']; ?></p>
-                <p class='posted-by-text'>by <?php echo $post['username'] ?></p>
+                <p class='posted-by-text'>by <a class='posted-by-text-link' href='index.php?user/username=<?php echo $post['username']; ?>'><?php echo $post['username'] ?></a></p>
                 <h4><?php echo $thread['name']; ?></h4>
             </div>
 

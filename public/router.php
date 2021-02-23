@@ -19,6 +19,7 @@ require_once ROOT_PATH.'3leaf/Controllers/SidenavController.php';
 require_once ROOT_PATH.'3leaf/Controllers/BoardPageController.php';
 require_once ROOT_PATH.'3leaf/Controllers/ThreadPageController.php';
 require_once ROOT_PATH.'3leaf/Controllers/SessionController.php';
+require_once ROOT_PATH.'3leaf/Controllers/UserPageController.php';
 
 require_once ROOT_PATH.'framework/Router.php';
 require_once ROOT_PATH.'framework/ExceptionHandler.php';
@@ -89,6 +90,10 @@ $router->add('login/welcome',
 $router->add('register/welcome', 
     ['controller' => 'Dalton\ThreeLeaf\Controllers\Session', 
     'task' => 'welcomeRegister', 'method' => 'GET']);
+
+$router->add('user/{username=[a-zA-Z0-9]+}', 
+    ['controller' => 'Dalton\ThreeLeaf\Controllers\UserPage', 
+    'task' => 'showUserPage', 'method' => 'GET']);
 
 $router->execute($_SERVER['QUERY_STRING'], $_SERVER['REQUEST_METHOD']); 
 

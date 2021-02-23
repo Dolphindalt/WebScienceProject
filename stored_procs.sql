@@ -306,7 +306,7 @@ END //
 DELIMITER ;
 
 DELIMITER //
-CREATE OR REPLACE PROCEDURE fetchActiveThreadsFromUser(
+CREATE OR REPLACE PROCEDURE fetchActivePostsFromUser(
     IN username varchar(36))
 BEGIN
     DECLARE user_id int;
@@ -319,16 +319,22 @@ BEGIN
     INTO 
         user_id;
     SELECT DISTINCT
+        posts.id AS post_id,
+        posts.content,
+        posts.time_created,
         threads.name,
-        threads.id,
-        boards.directory
+        threads.id AS thread_id,
+        boards.directory,
+        boards.name AS board_name
     FROM
-        threads
+        posts
+    LEFT JOIN
+        threads ON posts.thread_id = threads.id
     LEFT JOIN
         boards ON boards.id = threads.board_id
-    LEFT JOIN
-        posts ON posts.thread_id = threads.id
     WHERE
-        posts.uploader_id = user_id;
+        posts.uploader_id = user_id
+    ORDER BY
+        posts.time_created DESC;
 END //
 DELIMITER ;

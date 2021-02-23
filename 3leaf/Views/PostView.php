@@ -75,7 +75,7 @@ function toggleVisibleByClick(elmnt1, elmnt2) {
                 <?php if (isset($thread)) { ?>
                     <h4 class='inline'><?php echo $thread['name']; ?></h4><br>
                 <?php } ?>
-                <p class='posted-by-text inline'>by <?php echo $post['username'] ?> at <?php echo $post['time_created'] ?></p>
+                <p class='posted-by-text inline'>by <a class='posted-by-text-link' href='index.php?user/username=<?php echo $post['username']; ?>'><?php echo $post['username'] ?></a> at <?php echo $post['time_created'] ?></p>
                 <?php
                     if (!empty($reply_ids)) {
                         foreach ($reply_ids as $reply_id) {

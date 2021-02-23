@@ -138,6 +138,19 @@ input[type='file']:hover {
     font-weight: bold;
 }
 
+.posted-by-text-link {
+    color: rgb(38, 38, 219);
+    font-weight: bold;
+}
+
+.posted-by-text-link:hover {
+    color: #551A8B !important;
+}
+
+.posted-by-text-link:visited {
+    color: rgb(38, 38, 219);
+}
+
 .home-grid-container {
     grid-template-columns: 200px auto;
     height: 100%;
@@ -186,10 +199,6 @@ input[type='file']:hover {
 
 .text-link:visited {
     color: #0000EE;
-}
-
-.text-link:target {
-    background-color: #e05f7b;
 }
 /* End misc globals. */
 
@@ -384,6 +393,10 @@ ul {
     background-color: #ec9d9d;
     padding: 0.5em;
     display: flex;
+}
+
+.post-wrapper:target {
+    background-color: #e9c3c3;
 }
 
 .post-content-wrapper {
