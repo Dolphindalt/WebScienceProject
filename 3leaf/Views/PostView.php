@@ -71,7 +71,7 @@ function toggleVisibleByClick(elmnt1, elmnt2) {
         ?>
         <div class='post-content-wrapper'>
             <div class='post-header'>
-                <p class='info-text inline post-id' onclick='onPostIDClick(this)'>post no. <?php echo $post['id']; ?></p>
+                <p id='<?php echo 'pid' . $post['id']; ?>' class='info-text inline post-id' onclick='onPostIDClick(this)'>post no. <?php echo $post['id']; ?></p>
                 <?php if (isset($thread)) { ?>
                     <h4 class='inline'><?php echo $thread['name']; ?></h4><br>
                 <?php } ?>

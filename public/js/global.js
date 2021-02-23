@@ -102,7 +102,7 @@ function mysqlGmtStrToJSLocal(str) {
 
 function onPostIDClick(clicked_elmnt) {
     let elm_id = clicked_elmnt.id;
-    let post_id = elm_id.substring(1, elm_id.length);
+    let post_id = elm_id.substring(3, elm_id.length);
     $('#comment').val($('#comment').val() + '>>' + post_id + '\n');
     document.getElementById("modal-show").onclick();
 }
