@@ -58,13 +58,41 @@ BEGIN
         threads.id,
         threads.post_count,
         threads.image_count,
-        threads.name
+        threads.name,
+        threads.is_archived
     FROM
         threads
     WHERE
         board_id = threads.board_id
     ORDER BY
-        threads.time_updated DESC;
+        threads.time_updated DESC
+    LIMIT
+        10;
+END //
+DELIMITER ;
+
+DELIMITER //
+CREATE OR REPLACE PROCEDURE selectArchivedThreadsFromBoard(
+    IN board_directory varchar(12))
+BEGIN
+    DECLARE board_id INT;
+    CALL getBoardIdFromDirectory(board_directory, board_id);
+    SELECT
+        threads.id,
+        threads.post_count,
+        threads.image_count,
+        threads.name,
+        threads.is_archived
+    FROM
+        threads
+    WHERE
+        board_id = threads.board_id
+    ORDER BY
+        threads.time_updated DESC
+    LIMIT # This is awful but MySQL suggests we use a cap so I would rather use 500 than max int.
+          # Threads should not live very long anyways so the archive will not grow large.
+          # If not, then we just do not show old archived threads.
+        500 OFFSET 10;
 END //
 DELIMITER ;
 
@@ -76,7 +104,8 @@ BEGIN
         threads.id,
         threads.post_count,
         threads.image_count,
-        threads.name
+        threads.name,
+        threads.is_archived
     FROM
         threads
     WHERE
@@ -209,11 +238,22 @@ CREATE OR REPLACE PROCEDURE createThread(
 BEGIN
     DECLARE board_id int;
     DECLARE thread_id int;
+    DECLARE uploader_id int;
+    SELECT 
+        users.id
+    FROM 
+        users
+    WHERE
+        LOWER(users.username) = LOWER(uploader_name)
+    INTO 
+        uploader_id;
     CALL getBoardIdFromDirectory(board_directory, board_id);
-    INSERT INTO threads (board_id, time_updated, post_count, image_count, name)
-    VALUES (board_id, NOW(), 1, 1, name);
+    INSERT INTO threads (board_id, time_updated, post_count, image_count, name, uploader_id)
+    VALUES (board_id, NOW(), 1, 1, name, uploader_id);
     SELECT LAST_INSERT_ID() INTO thread_id;
     CALL createPost(board_directory, thread_id, content, uploader_name, file_id);
+    # Archive the 11th thread if it exists. This is the thread that slid off the page.
+    UPDATE threads SET threads.is_archived = 1 WHERE threads.id = (SELECT threads.id FROM threads LIMIT 1 OFFSET 10);
     CALL selectThreadById(thread_id);
 END //
 DELIMITER ;
@@ -336,5 +376,76 @@ BEGIN
         posts.uploader_id = user_id
     ORDER BY
         posts.time_created DESC;
+END //
+DELIMITER ;
+
+DELIMITER //
+CREATE OR REPLACE PROCEDURE deleteThread(
+    IN thread_id int,
+    IN username varchar(36),
+    OUT did_delete bool)
+BEGIN
+    DECLARE user_id int;
+    DECLARE user_role int;
+    DECLARE thread_owner_id int;
+    SET did_delete = 0;
+    SELECT
+        users.id,
+        users.role
+    FROM
+        users
+    WHERE
+        LOWER(users.username) = LOWER(username)
+    INTO
+        user_id,
+        user_role;
+    SELECT
+        threads.uploader_id
+    FROM
+        threads
+    WHERE
+        threads.id = thread_id
+    INTO
+        thread_owner_id;
+    IF user_id = thread_owner_id OR user_role = 1 THEN
+        DELETE FROM threads WHERE threads.id = thread_id;
+        DELETE FROM posts WHERE posts.thread_id = thread_id;
+        SET did_delete = 1;
+    END IF;
+END //
+DELIMITER ;
+
+DELIMITER //
+CREATE OR REPLACE PROCEDURE deletePost(
+    IN post_id int,
+    IN username varchar(36),
+    OUT did_delete bool)
+BEGIN
+    DECLARE user_id int;
+    DECLARE user_role int;
+    DECLARE post_owner_id int;
+    SET did_delete = 0;
+    SELECT
+        users.id,
+        users.role
+    FROM
+        users
+    WHERE
+        LOWER(users.username) = LOWER(username)
+    INTO
+        user_id,
+        user_role;
+    SELECT
+        posts.uploader_id
+    FROM
+        posts
+    WHERE
+        posts.id = post_id
+    INTO
+        post_owner_id;
+    IF user_id = post_owner_id OR user_role = 1 THEN
+        DELETE FROM posts WHERE posts.post_id = post_id;
+        SET did_delete = 1;
+    END IF;
 END //
 DELIMITER ;

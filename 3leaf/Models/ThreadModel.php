@@ -12,7 +12,15 @@ class ThreadModel extends Model {
     public static function getThreads($board_dir) {
         $statement = Model::getDB()->prepare("CALL selectThreadsFromBoard(?)");
         $statement->bindParam(1, $board_dir, PDO::PARAM_STR);
-        $result_set = $statement->execute();
+        $statement->execute();
+        $results = $statement->fetchAll(PDO::FETCH_ASSOC);
+        return $results;
+    }
+
+    public static function getArchivedThreads($board_dir) {
+        $statement = Model::getDB()->prepare("CALL selectArchivedThreadsFromBoard(?)");
+        $statement->bindParam(1, $board_dir, PDO::PARAM_STR);
+        $statement->execute();
         $results = $statement->fetchAll(PDO::FETCH_ASSOC);
         return $results;
     }
@@ -20,7 +28,7 @@ class ThreadModel extends Model {
     public static function getThread($thread_id) {
         $statement = Model::getDB()->prepare("CALL selectThreadById(?)");
         $statement->bindParam(1, $thread_id, PDO::PARAM_STR);
-        $result_set = $statement->execute();
+        $statement->execute();
         $results = $statement->fetchAll(PDO::FETCH_ASSOC);
         return $results[0];
     }
@@ -36,10 +44,23 @@ class ThreadModel extends Model {
         $statement->execute();
         $results = $statement->fetchAll(PDO::FETCH_ASSOC);
         $thread = $results[0];
-
-        
-
         return $thread;
+    }
+
+    // Permissions are checked in the database as to not store any changing data in the session.
+    public static function deleteThread($thread_id, $username) {
+        $statement = Model::getDB()->prepare("CALL deleteThread(?, ?, @had_permission)");
+        $statement->bindParam(1, $thread_id, PDO::PARAM_INT);
+        $statement->bindParam(2, $username, PDO::PARAM_STR, 36);
+        $statement->execute();
+        $statement = Model::getDB()->query('SELECT @had_permission;');
+        $statement->execute();
+        $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+        if (empty($result)) {
+            return false;
+        } else {
+            return (bool)$result[0]['@had_permission'];
+        }
     }
 
 }

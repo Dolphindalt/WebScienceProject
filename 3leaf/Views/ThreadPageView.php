@@ -15,10 +15,21 @@ if (array_key_exists('error', $args))
 ?>
 <h1 class='center'><?php echo $board['directory']; ?> - <?php echo $board['name']; ?></h1>
 <p class='info-text center'>thread no. <?php echo $thread['id']; ?></p>
+<?php
+    if ($thread['is_archived']) {
+        echo "<h4 class='center'>This thread is archived. You can no longer reply.</h4>";
+    }
+?>
 <hr>
 <div class='center'>
     <div class='inline'><a class='post-thread-header-text' href='index.php?board/dir=<?php echo $board['directory']; ?>'><h2>[Catalog]</h2></a></div>
-    <div id='modal-show' class='inline'><h2 class='post-thread-header-text'>[Reply]</h2></div>
+    <?php 
+        if (!$thread['is_archived']) {
+    ?>
+        <div id='modal-show' class='inline'><h2 class='post-thread-header-text'>[Reply]</h2></div>
+    <?php
+        }
+    ?>
 </div>
 <hr>
 <?php

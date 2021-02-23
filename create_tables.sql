@@ -20,6 +20,7 @@ CREATE TABLE users (
     id int NOT NULL AUTO_INCREMENT,
     password_id int NOT NULL,
     username varchar(36) NOT NULL UNIQUE,
+    role int NOT NULL DEFAULT 0, # 0 - normal user, 1 - moderator
     FOREIGN KEY(password_id) REFERENCES passwords(id),
     PRIMARY KEY(id)
 );
@@ -44,13 +45,13 @@ CREATE TABLE boards (
     PRIMARY KEY(id)
 );
 
-INSERT INTO boards (name, directory) VALUES ("Movies", "mv");
-INSERT INTO boards (name, directory) VALUES ("Video Games", "vc");
-INSERT INTO boards (name, directory) VALUES ("Technology", "tch");
-INSERT INTO boards (name, directory) VALUES ("Random", "r");
-INSERT INTO boards (name, directory) VALUES ("Minecraft", "mc");
 INSERT INTO boards (name, directory) VALUES ("Crypto", "c");
 INSERT INTO boards (name, directory) VALUES ("Mathematics", "math");
+INSERT INTO boards (name, directory) VALUES ("Minecraft", "mc");
+INSERT INTO boards (name, directory) VALUES ("Movies", "mv");
+INSERT INTO boards (name, directory) VALUES ("Random", "r");
+INSERT INTO boards (name, directory) VALUES ("Technology", "tch");
+INSERT INTO boards (name, directory) VALUES ("Video Games", "vc");
 
 CREATE TABLE threads (
     id int NOT NULL AUTO_INCREMENT,
@@ -59,14 +60,17 @@ CREATE TABLE threads (
     post_count int NOT NULL,
     image_count int NOT NULL,
     name varchar(1024) NOT NULL,
+    uploader_id int NOT NULL,
+    is_archived bool NOT NULL DEFAULT 0,
     FOREIGN KEY(board_id) REFERENCES boards(id),
+    FOREIGN KEY(uploader_id) REFERENCES users(id),
     PRIMARY KEY(id)
 );
 
-INSERT INTO threads (board_id, time_updated, post_count, image_count, name)
-VALUES (4, "1970-01-01 00:00:01", 1, 1, "Ottman Empire Thread");
-INSERT INTO threads (board_id, time_updated, post_count, image_count, name)
-VALUES (4, "1970-01-01 00:00:01", 1, 1, "How to remove flock material from car dashboard");
+INSERT INTO threads (board_id, time_updated, post_count, image_count, name, uploader_id, is_archived)
+VALUES (5, "1970-01-01 00:00:01", 1, 1, "Ottman Empire Thread", 1, 0);
+INSERT INTO threads (board_id, time_updated, post_count, image_count, name, uploader_id, is_archived)
+VALUES (5, "1970-01-01 00:00:01", 1, 1, "How to remove flock material from car dashboard", 1, 0);
 
 CREATE TABLE posts (
     id int NOT NULL AUTO_INCREMENT,
@@ -82,9 +86,9 @@ CREATE TABLE posts (
 );
 
 INSERT INTO posts (thread_id, uploader_id, file_id, content, time_created)
-VALUES (1, 1, 1, "What do you think of the Ottoman Empire?", "1970-01-01 00:00:01");
+VALUES (1, 1, 1, "What do you think of the Ottoman Empire?", NOW());
 INSERT INTO posts (thread_id, uploader_id, file_id, content, time_created)
-VALUES (2, 1, 2, "    A friend of mine put flock on his car's dashboard and can't seem to get it off any of you know how to?", "1980-01-01 00:00:01");
+VALUES (2, 1, 2, "A friend of mine put flock on his car's dashboard and can't seem to get it off any of you know how to?", NOW());
 
 CREATE TABLE post_replies (
     id int NOT NULL AUTO_INCREMENT,

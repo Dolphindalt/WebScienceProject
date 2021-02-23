@@ -34,6 +34,10 @@ class ThreadPage extends ControllerBase {
 
         $posts = PostModel::fetchAllPostsFromThread($thread_id);
         
+        $this->showThreadPage($thread_id, $board, $thread, $posts);
+    }
+
+    private function showThreadPage($thread_id, $board, $thread, $posts) {
         $args = ['board' => $board, 'thread' => $thread, 'posts' => $posts];
         if (array_key_exists('error', $this->params)) {
             $args['error'] = $this->params['error'];

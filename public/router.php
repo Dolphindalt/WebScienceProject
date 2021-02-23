@@ -39,6 +39,14 @@ $router->add('',
     ['controller' => 'Dalton\ThreeLeaf\Controllers\Home', 
     'task' => 'show', 'method' => 'GET']);
 
+$router->add('rules', 
+    ['controller' => 'Dalton\ThreeLeaf\Controllers\Home', 
+    'task' => 'showRules', 'method' => 'GET']);
+
+$router->add('faq', 
+    ['controller' => 'Dalton\ThreeLeaf\Controllers\Home', 
+    'task' => 'showFAQ', 'method' => 'GET']);
+
 $router->add('boards', 
     ['controller' => 'Dalton\ThreeLeaf\Controllers\Boards', 
     'task' => 'list', 'method' => 'GET']);

@@ -64,6 +64,21 @@ class PostModel extends Model {
         $statement->execute();
     }
 
+    public static function deletePost($post_id, $username) {
+        $statement = Model::getDB()->prepare("CALL deletePost(?, ?, @had_permission)");
+        $statement->bindParam(1, $post_id, PDO::PARAM_INT);
+        $statement->bindParam(2, $username, PDO::PARAM_STR, 36);
+        $statement->execute();
+        $statement = Model::getDB()->query('SELECT @had_permission;');
+        $statement->execute();
+        $result = $statement->fetchAll(PDO::FETCH_ASSOC);
+        if (empty($result)) {
+            return false;
+        } else {
+            return (bool)$result[0]['@had_permission'];
+        }
+    }
+
 }
 
 ?>

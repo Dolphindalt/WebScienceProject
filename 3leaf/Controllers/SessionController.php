@@ -56,6 +56,13 @@ class Session extends ControllerBase {
             die();
         }
 
+        if (!preg_match('/[a-zA-Z0-9]+/', $username)) {
+            http_response_code(409);
+            $this->error = "Usernames should only contain alphanumeric characters.";
+            $this->showRegisterPageTask();
+            die();
+        }
+
         if (!preg_match("#.*^(?=.{8,20})(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9]).*$#", $password)) {
             http_response_code(409);
             $this->error = "Password must contain between 8 and 20 characters, include one number, include one upper case character, and include one symbol.";
