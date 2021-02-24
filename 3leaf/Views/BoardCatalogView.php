@@ -5,16 +5,31 @@ use Dalton\Framework\View;
 $board = $args['board'];
 $threads = $args['threads'];
 $rootPosts = $args['root_posts'];
+$is_archive = $args['is_archive'];
 if (array_key_exists('error', $args))
     $error = $args['error'];
 
 ?>
 <h1 class='center'><?php echo $board['directory']; ?> - <?php echo $board['name']; ?></h1>
+<?php
+    if ($is_archive) {
+        echo "<h4 class='center'>These threads are archived. You can no longer reply.</h4>";
+    }
+?>
 <hr>
-<div class='center'>
-    <div id='modal-show'><h2 class='post-thread-header-text'>[Post new thread]</h2></div>
-</div>
-<hr>
+<?php
+    if (!$is_archive) {
+?>
+        <div class='center'>
+            <div class='inline'>
+                <div id='modal-show'><h2 class='post-thread-header-text'>[Post new thread]</h2></div>
+            </div>
+                <div class='inline'><a class='post-thread-header-text' href='index.php?board/archive/dir=<?php echo $board['directory']; ?>'><h2>[Archive]</h2></a></div>
+        </div>
+        <hr>
+<?php
+    }
+?>
 <div class='board-catalog-grid'>
     <?php
         if (!empty($threads)) {

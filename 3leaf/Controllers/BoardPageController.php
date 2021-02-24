@@ -29,12 +29,32 @@ class BoardPage extends ControllerBase {
         }
         // We need to fetch a list of all threads.
         $threads = ThreadModel::getThreads($board_directory);
+        $this->showBoardCatalog($board, $threads, false);
+    }
+
+    public function showBoardCatalogArchiveTask() {
+        // Ensure the directory parameter is set.
+        if (!isset($this->params['dir'])) {
+            $this->pageNotFound();
+        }
+        // Ensure the board exists.
+        $board_directory = strtolower($this->params['dir']);
+        $board = BoardModel::getBoardFromDirectory($board_directory);
+        if (empty($board)) {
+            $this->pageNotFound();
+        }
+        // We need to fetch a list of all threads.
+        $threads = ThreadModel::getArchivedThreads($board_directory);
+        $this->showBoardCatalog($board, $threads, true);
+    }
+
+    private function showBoardCatalog($board, $threads, $is_archive) {
         $rootPosts = [];
         foreach ($threads as $thread) {
             $root = PostModel::fetchRootPostFromThread($thread['id']);
             array_push($rootPosts, $root);
         }
-        $args = ['board' => $board, 'threads' => $threads, 'root_posts' => $rootPosts, ];
+        $args = ['board' => $board, 'threads' => $threads, 'root_posts' => $rootPosts, 'is_archive' => $is_archive];
         if (array_key_exists('error', $this->params)) {
             $args['error'] = $this->params['error'];
         }

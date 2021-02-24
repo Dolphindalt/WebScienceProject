@@ -22,11 +22,15 @@ if (array_key_exists('error', $args))
 ?>
 <hr>
 <div class='center'>
-    <div class='inline'><a class='post-thread-header-text' href='index.php?board/dir=<?php echo $board['directory']; ?>'><h2>[Catalog]</h2></a></div>
     <?php 
         if (!$thread['is_archived']) {
     ?>
-        <div id='modal-show' class='inline'><h2 class='post-thread-header-text'>[Reply]</h2></div>
+            <div class='inline'><a class='post-thread-header-text' href='index.php?board/dir=<?php echo $board['directory']; ?>'><h2>[Catalog]</h2></a></div>
+            <div id='modal-show' class='inline'><h2 class='post-thread-header-text'>[Reply]</h2></div>
+    <?php
+        } else {
+    ?>
+            <div class='inline'><a class='post-thread-header-text' href='index.php?board/archive/dir=<?php echo $board['directory']; ?>'><h2>[Archive]</h2></a></div>
     <?php
         }
     ?>

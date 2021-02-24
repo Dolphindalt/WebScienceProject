@@ -55,6 +55,10 @@ $router->add('board/{dir=[a-zA-Z]*}',
     ['controller' => 'Dalton\ThreeLeaf\Controllers\BoardPage',
     'task' => 'showBoardCatalog', 'method' => 'GET']);
 
+$router->add('board/archive/{dir=[a-zA-Z]*}', 
+    ['controller' => 'Dalton\ThreeLeaf\Controllers\BoardPage',
+    'task' => 'showBoardCatalogArchive', 'method' => 'GET']);
+
 $router->add('board/{dir=[a-zA-Z]*}', 
     ['controller' => 'Dalton\ThreeLeaf\Controllers\Threads', 
     'task' => 'createThread', 'method' => 'POST']);
