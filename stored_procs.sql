@@ -78,10 +78,17 @@ CREATE OR REPLACE PROCEDURE selectArchivedThreadsFromBoard(
     IN board_directory VARCHAR(12))
 BEGIN
     DECLARE board_id INT;
-    CALL getBoardIdFromDirectory(board_directory, board_id);
     DECLARE archive_limit INT;
     DECLARE thread_limit INT;
-    SELECT boards.archive_limit, boards.thread_limit FROM boards WHERE boards.id = board_id INTO archive_limit, thread_limit;
+    CALL getBoardIdFromDirectory(board_directory, board_id);
+    SELECT 
+        boards.archive_limit, boards.thread_limit 
+    INTO 
+        archive_limit, thread_limit 
+    FROM 
+        boards 
+    WHERE 
+        boards.id = board_id;
     SELECT
         threads.id,
         threads.post_count,
@@ -269,6 +276,7 @@ BEGIN
     # Archive the sliding thread if it exists. This is the thread that slid off the page.
     SELECT boards.thread_limit FROM boards WHERE boards.id = board_id INTO board_thread_limit;
     UPDATE threads SET threads.is_archived = 1 WHERE threads.id = (SELECT threads.id FROM threads LIMIT 1 OFFSET board_thread_limit);
+    CALL pruneOldThreads(board_id);
     CALL selectThreadById(thread_id);
 END //
 DELIMITER ;
@@ -461,6 +469,30 @@ BEGIN
     IF user_id = post_owner_id OR user_role = 1 THEN
         DELETE FROM posts WHERE posts.post_id = post_id;
         SET did_delete = 1;
+    END IF;
+END //
+DELIMITER ;
+
+DELIMITER //
+CREATE OR REPLACE PROCEDURE pruneOldThreads(
+    IN board_id INT)
+BEGIN
+    DECLARE prune_offset INT;
+    DECLARE prune_thread_id INT;
+    SET prune_thread_id = 0;
+    SELECT (boards.thread_limit + boards.archive_limit) FROM boards WHERE boards.id = board_id LIMIT 1 INTO prune_offset;
+    SELECT
+        threads.id
+    INTO
+        prune_thread_id
+    FROM
+        threads
+    WHERE
+        threads.board_id = board_id
+    LIMIT
+        1 OFFSET prune_offset;
+    IF prune_thread_id != 0 THEN
+        DELETE FROM threads WHERE threads.id = prune_thread_id;
     END IF;
 END //
 DELIMITER ;
