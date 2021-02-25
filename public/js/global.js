@@ -106,3 +106,33 @@ function onPostIDClick(clicked_elmnt) {
     $('#comment').val($('#comment').val() + '>>' + post_id + '\n');
     document.getElementById("modal-show").onclick();
 }
+
+function deleteThread(clicked_elmnt, board_dir) {
+    let elm_id = clicked_elmnt.id;
+    let thread_id = elm_id.substring(7, elm_id.length);
+    $.ajax({
+        url: "index.php?threads/thread_id=" + thread_id,
+        type: "DELETE",
+        success: () => {
+            window.location.replace("index.php?board/dir=" + board_dir);
+        },
+        error: () => {
+            window.location.reload();
+        }
+    });
+}
+
+function deletePost(clicked_elmnt) {
+    let elm_id = clicked_elmnt.id;
+    let post_id = elm_id.substring(7, elm_id.length);
+    $.ajax({
+        url: "index.php?posts/post_id=" + post_id,
+        type: "DELETE",
+        success: () => {
+            window.location.reload();
+        },
+        error: () => {
+            window.location.reload();
+        }
+    });
+}

@@ -17,6 +17,7 @@ use Dalton\Framework\ControllerBase;
 use Dalton\ThreeLeaf\Models\BoardModel;
 use Dalton\ThreeLeaf\Controllers\ThreadPage;
 use Dalton\ThreeLeaf\Controllers\BoardPage;
+use Dalton\ThreeLeaf\Models\FileModel;
 use Dalton\ThreeLeaf\Models\PostModel;
 
 class Threads extends ControllerBase {
@@ -26,7 +27,68 @@ class Threads extends ControllerBase {
         echo json_encode($boardThreads);
     }
 
+    public function deletePostTask() {
+        if (!array_key_exists('post_id', $this->params)) {
+            $this->pageNotFound();
+        }
+
+        if (!isset($_SESSION[LOGGED_IN])) {
+            http_response_code(401);
+            die();
+        }
+
+        $post_id = $this->params['post_id'];
+
+        $file_results = FileModel::getFileRecordFromPostID($post_id);
+
+        $result = PostModel::deletePost($post_id, $_SESSION[USERNAME]);
+        echo $result;
+        if ($result) {
+            if ($file_results != null) {
+                $file_name = $file_results['file_name'];
+                echo $file_name;
+                unlink(ROOT_PATH . 'public/post_images/' . $file_name);
+            }
+            http_response_code(204);
+        } else {
+            http_response_code(401);
+        }
+    }
+
+    public function deleteThreadTask() {
+        if (!array_key_exists('thread_id', $this->params)) {
+            $this->pageNotFound();
+        }
+
+        if (!isset($_SESSION[LOGGED_IN])) {
+            http_response_code(401);
+            die();
+        }
+
+        $thread_id = $this->params['thread_id'];
+
+        $file_records = FileModel::getFileRecordsFromThreadID($thread_id);
+
+        $result = ThreadModel::deleteThread($thread_id, $_SESSION[USERNAME]);
+
+        if ($result) {
+            if ($file_records != null) {
+                foreach ($file_records as $file) {
+                    unlink(ROOT_PATH . 'public/post_images/' . $file['file_name']);
+                    FileModel::deleteFileRecord($file['id']);
+                }
+            }
+            http_response_code(204);
+        } else {
+            http_response_code(401);
+        }
+    }
+
     public function createThreadTask() {
+        if (!array_key_exists('dir', $this->params)) {
+            $this->pageNotFound();
+        }
+
         $board_dir = $this->params['dir'];
 
         if (!BoardModel::isBoardDirectoryValid($board_dir)) {

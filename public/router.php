@@ -75,6 +75,14 @@ $router->add('threads/{board=[a-zA-Z]*}',
     ['controller' => 'Dalton\ThreeLeaf\Controllers\Threads', 
     'task' => 'listFromBoard', 'method' => 'GET']);
 
+$router->add('threads/{thread_id=\d*}', 
+    ['controller' => 'Dalton\ThreeLeaf\Controllers\Threads', 
+    'task' => 'deleteThread', 'method' => 'DELETE']);
+
+$router->add('posts/{post_id=\d*}', 
+    ['controller' => 'Dalton\ThreeLeaf\Controllers\Threads', 
+    'task' => 'deletePost', 'method' => 'DELETE']);
+
 $router->add('login',
     ['controller' => 'Dalton\ThreeLeaf\Controllers\Session', 
     'task' => 'showLoginPage', 'method' => 'GET']);

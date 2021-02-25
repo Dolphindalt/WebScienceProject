@@ -313,7 +313,7 @@ proc_label: BEGIN
         LEAVE proc_label;
     END IF;
     INSERT INTO passwords (password) VALUES (password);
-    INSERT INTO users (password_id, username) VALUES (LAST_INSERT_ID(), username);
+    INSERT INTO users (password_id, username, role) VALUES (LAST_INSERT_ID(), username, 0);
     SET errorMessage = '';
 END //
 DELIMITER ;
@@ -447,6 +447,8 @@ BEGIN
     DECLARE user_id INT;
     DECLARE user_role INT;
     DECLARE post_owner_id INT;
+    DECLARE post_file_id INT;
+    DECLARE thread_id INT;
     SET did_delete = 0;
     SELECT
         users.id,
@@ -467,12 +469,21 @@ BEGIN
     INTO
         post_owner_id;
     IF user_id = post_owner_id OR user_role = 1 THEN
-        DELETE FROM posts WHERE posts.post_id = post_id;
+        DELETE FROM post_replies WHERE post_replies.parent_post_id = post_id OR post_replies.reply_post_id = post_id;
+        SELECT posts.file_id, posts.thread_id FROM posts WHERE posts.id = post_id INTO post_file_id, thread_id;
+        DELETE FROM posts WHERE posts.id = post_id;
+        DELETE FROM files WHERE post_file_id IS NOT NULL AND files.id = post_file_id;
+        IF post_file_id IS NOT NULL THEN
+            UPDATE threads SET threads.post_count = threads.post_count - 1, threads.image_count = threads.image_count - 1 WHERE threads.id = thread_id;
+        ELSE
+            UPDATE threads SET threads.post_count = threads.post_count - 1 WHERE threads.id = thread_id;
+        END IF;
         SET did_delete = 1;
     END IF;
 END //
 DELIMITER ;
 
+# It really tries to prune a single thread. Should be called when a new thread is created.
 DELIMITER //
 CREATE OR REPLACE PROCEDURE pruneOldThreads(
     IN board_id INT)
@@ -494,5 +505,63 @@ BEGIN
     IF prune_thread_id != 0 THEN
         DELETE FROM threads WHERE threads.id = prune_thread_id;
     END IF;
+END //
+DELIMITER ;
+
+# It just returns their role, but we could have more data for users.
+DELIMITER //
+CREATE OR REPLACE PROCEDURE getUser(
+    IN username VARCHAR(36))
+BEGIN
+    SELECT
+        users.id,
+        users.role
+    FROM
+        users
+    WHERE
+        LOWER(username) = LOWER(users.username);
+END //
+DELIMITER ;
+
+DELIMITER //
+CREATE OR REPLACE PROCEDURE getFileRecordFromPostID(
+    IN post_id INT)
+BEGIN
+    SELECT
+        files.file_name
+    FROM
+        files
+    LEFT JOIN
+        posts ON posts.id = post_id
+    WHERE
+        posts.file_id = files.id
+    LIMIT
+        1;
+END //
+DELIMITER ;
+
+DELIMITER //
+CREATE OR REPLACE PROCEDURE fetchFileRecordsFromThread(
+    IN thread_id INT)
+BEGIN
+    SELECT
+        files.id,
+        files.file_name
+    FROM
+        threads
+    LEFT JOIN
+        posts ON posts.thread_id = thread_id
+    LEFT JOIN
+        files ON posts.file_id = files.id
+    WHERE
+        threads.id = thread_id;
+END //
+DELIMITER ;
+
+DELIMITER //
+CREATE OR REPLACE PROCEDURE deleteFileRecord(
+    IN file_id INT)
+BEGIN
+    DELETE FROM files WHERE file_id = files.id;
 END //
 DELIMITER ;

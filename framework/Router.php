@@ -20,7 +20,7 @@ class Router {
             throw new Exception('Route task must be set.', 500);
         }
         $route = preg_replace('/\//', '\\/', $route);
-        $route = preg_replace('/\{([a-zA-Z]+)=([^\}]+)\}/', '\1=\2', $route);
+        $route = preg_replace('/\{([a-zA-Z_]+)=([^\}]+)\}/', '\1=\2', $route);
         $route = '/^' . $route . '$/i';
         $route_id = $route . " " . $params['method'];
         if (array_key_exists($route_id, $this->routes)) {

@@ -112,8 +112,13 @@ class Session extends ControllerBase {
     }
 
     public function setupSession($username) {
-        $_SESSION[USERNAME] = $username;
-        $_SESSION[LOGGED_IN] = true;
+        $user = UserModel::fetchUser($username);
+        if ($user != null) {
+            $_SESSION[USERNAME] = $username;
+            $_SESSION[LOGGED_IN] = true;
+            $_SESSION[ROLE] = (int) $user['role'];
+            $_SESSION[USER_ID] = (int) $user['id'];
+        }
     }
 
     public function destroySession() {

@@ -428,6 +428,33 @@ ul {
 }
 /* End post styling. */
 
+/* Dropdown styling. */
+.dropdown {
+    position: relative;
+    display: inline-block;
+    font-size: 20px;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    min-width: 100px;
+    z-index: 1;
+    background-color: black;
+    padding: 1px;
+    border-bottom: none !important;
+}
+
+.dropdown-content-box {
+    border: 1px solid;
+    background-color: #e9c3c3;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+/* End dropdown styling. */
+
 /* Form styling. */
 .form-style {
     padding: 25px 50px;

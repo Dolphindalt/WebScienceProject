@@ -84,7 +84,7 @@ CREATE TABLE posts (
     time_created TIMESTAMP,
     FOREIGN KEY(thread_id) REFERENCES threads(id),
     FOREIGN KEY(uploader_id) REFERENCES users(id),
-    FOREIGN KEY(file_id) REFERENCES files(id),
+    FOREIGN KEY(file_id) REFERENCES files(id) ON DELETE SET NULL,
     PRIMARY KEY(id)
 );
 

@@ -3,6 +3,7 @@
 use Dalton\ThreeLeaf\Models\PostModel;
 
 require_once ROOT_PATH.'3leaf/Models/PostModel.php';
+require_once ROOT_PATH.'3leaf/global_const.php';
 
 // The OP is displayed differently.
 if (array_key_exists('thread', $args)) {
@@ -75,7 +76,24 @@ function toggleVisibleByClick(elmnt1, elmnt2) {
                 <?php if (isset($thread)) { ?>
                     <h4 class='inline'><?php echo $thread['name']; ?></h4><br>
                 <?php } ?>
-                <p class='posted-by-text inline'>by <a class='posted-by-text-link' href='index.php?user/username=<?php echo $post['username']; ?>'><?php echo $post['username'] ?></a> at <?php echo $post['time_created'] ?></p>
+                    <p class='posted-by-text inline'>by <a class='posted-by-text-link' href='index.php?user/username=<?php echo $post['username']; ?>'><?php echo $post['username'] ?></a> at <?php echo $post['time_created'] ?></p>
+                    <div class='dropdown inline'>
+                        <span>&#10157;</span>
+                        <div class='dropdown-content'>
+                            <p class='dropdown-content-box'><a>Report</a></p>
+                            <?php 
+                                if (array_key_exists(USER_ID, $_SESSION) && strtolower($post['username']) == strtolower($_SESSION[USERNAME]) || 
+                                    array_key_exists(ROLE, $_SESSION) && $_SESSION[ROLE] == MODERATOR) {
+                                    // This is OP, so we delete the thread if OP is deleted.
+                                    if (array_key_exists('thread', $args)) {
+                                        echo "<p class='dropdown-content-box'><a id='delete-" . $thread['id'] . "' onclick='deleteThread(this, \"" . $board['directory']  . "\");'>Delete</a></p>";
+                                    } else {
+                                        echo "<p class='dropdown-content-box'><a id='delete-" . $post['id'] . "' onclick='deletePost(this);'>Delete</a></p>";
+                                    }
+                                }
+                            ?>
+                        </div>
+                    </div>
                 <?php
                     if (!empty($reply_ids)) {
                         foreach ($reply_ids as $reply_id) {
