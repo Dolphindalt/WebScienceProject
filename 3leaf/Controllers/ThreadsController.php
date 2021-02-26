@@ -125,13 +125,13 @@ class Threads extends ControllerBase {
         $thread_name = $this->strip_html_and_slashes_and_non_spaces($thread_name);
         $thread = ThreadModel::createThread($board_dir, $thread_name, $content, $_SESSION[USERNAME], $file_id);
 
-        $thread_page_controller = new ThreadPage([]);
         ?>
             <script>
                 setCookie('modal-status', 'closed');
             </script>
         <?php
-        $thread_page_controller->showThreadPageWithError($board_dir, $thread['id'], null);
+        // We really need to redirect so that the query string changes and does not mess up posting.
+        header('Location: index.php?board/dir=' . $board_dir . '/thread=' . $thread['id']);
     }
 
     public function createPostOnThreadTask() {

@@ -115,9 +115,11 @@ function deleteThread(clicked_elmnt, board_dir) {
         type: "DELETE",
         success: () => {
             window.location.replace("index.php?board/dir=" + board_dir);
+            showSnackbar('Thread deleted.');
         },
         error: () => {
             window.location.reload();
+            showSnackbar('Failed to delete thread.');
         }
     });
 }
@@ -130,9 +132,48 @@ function deletePost(clicked_elmnt) {
         type: "DELETE",
         success: () => {
             window.location.reload();
+            showSnackbar('Post deleted.');
+        },
+        error: () => {
+            window.location.reload();
+            showSnackbar('Failed to delete post.');
+        }
+    });
+}
+
+function createReport(clicked_elmnt) {
+    let elm_id = clicked_elmnt.id;
+    let post_id = elm_id.substring(7, elm_id.length);
+    $.ajax({
+        url: "index.php?reports/post_id=" + post_id,
+        type: "POST",
+        success: () => {
+            showSnackbar('Report created.');
+        },
+        error: () => {
+            showSnackbar('This post is already reported.');
+        }
+    });
+}
+
+function deleteReport(clicked_elmnt) {
+    let elm_id = clicked_elmnt.id;
+    let report_id = elm_id.substring(7, elm_id.length);
+    $.ajax({
+        url: "index.php?reports/report_id=" + report_id,
+        type: "DELETE",
+        success: () => {
+            window.location.reload();
         },
         error: () => {
             window.location.reload();
         }
-    });
+    })
+}
+
+function showSnackbar(text) {
+    let elmt = document.getElementById("snackbar");
+    elmt.className = "show";
+    elmt.innerHTML = text;
+    setTimeout(() => { elmt.className = elmt.className.replace("show", ""); }, 3000);
 }

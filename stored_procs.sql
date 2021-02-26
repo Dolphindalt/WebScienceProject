@@ -101,7 +101,7 @@ BEGIN
         board_id = threads.board_id
     ORDER BY
         threads.time_updated DESC
-    LIMIT # This is awful but MySQL suggests we use a cap so I would rather use archive_limit than max INT.
+    LIMIT # This is interesting but MySQL suggests we use a cap so I would rather use archive_limit than max INT.
           # Threads should not live very long anyways so the archive will not grow large.
           # If not, then we just do not show old archived threads that will be pruned.
         archive_limit OFFSET thread_limit;
@@ -218,7 +218,7 @@ proc_label: BEGIN
 
     # Insertion of the post data.
     INSERT INTO posts (thread_id, uploader_id, file_id, content, time_created) 
-    VALUES (thread_id, uploader_id, file_id, content, NOW());
+    VALUES (thread_id, uploader_id, file_id, content, NOW(6));
 
     # Update the post counter.
     UPDATE threads SET threads.post_count = threads.post_count + 1 WHERE threads.id = thread_id;
@@ -241,7 +241,7 @@ proc_label: BEGIN
 
     # We stop bumping the thread to the front if there are enough replies.
     IF post_count < board_post_limit THEN
-        UPDATE threads SET threads.time_updated = NOW() WHERE threads.id = thread_id;
+        UPDATE threads SET threads.time_updated = NOW(6) WHERE threads.id = thread_id;
     END IF;
 
     SELECT LAST_INSERT_ID();
@@ -270,12 +270,12 @@ BEGIN
         uploader_id;
     CALL getBoardIdFromDirectory(board_directory, board_id);
     INSERT INTO threads (board_id, time_updated, post_count, image_count, name, uploader_id)
-    VALUES (board_id, NOW(), 1, 1, name, uploader_id);
+    VALUES (board_id, NOW(6), 0, 0, name, uploader_id);
     SELECT LAST_INSERT_ID() INTO thread_id;
     CALL createPost(board_directory, thread_id, content, uploader_name, file_id);
     # Archive the sliding thread if it exists. This is the thread that slid off the page.
     SELECT boards.thread_limit FROM boards WHERE boards.id = board_id INTO board_thread_limit;
-    UPDATE threads SET threads.is_archived = 1 WHERE threads.id = (SELECT threads.id FROM threads LIMIT 1 OFFSET board_thread_limit);
+    UPDATE threads SET threads.is_archived = 1 WHERE threads.id = (SELECT threads.id FROM threads ORDER BY threads.time_updated DESC LIMIT 1 OFFSET board_thread_limit);
     CALL pruneOldThreads(board_id);
     CALL selectThreadById(thread_id);
 END //
@@ -430,9 +430,10 @@ BEGIN
         threads.id = thread_id
     INTO
         thread_owner_id;
+    # Is the user the creator of the thread or a moderator?
     IF user_id = thread_owner_id OR user_role = 1 THEN
+        CALL deletePostsFromThread(thread_id);
         DELETE FROM threads WHERE threads.id = thread_id;
-        DELETE FROM posts WHERE posts.thread_id = thread_id;
         SET did_delete = 1;
     END IF;
 END //
@@ -480,6 +481,36 @@ BEGIN
         END IF;
         SET did_delete = 1;
     END IF;
+END //
+DELIMITER ;
+
+# Assumes this is called by the thread owner or moderator.
+DELIMITER //
+CREATE OR REPLACE PROCEDURE deletePostsFromThread(
+    IN thread_id INT)
+BEGIN
+    DECLARE done BOOL DEFAULT FALSE;
+    DECLARE post_id INT;
+    DECLARE did_delete BOOL;
+    DECLARE cur CURSOR FOR (
+        SELECT 
+            posts.id
+        FROM
+            posts
+        WHERE 
+            posts.thread_id = thread_id
+    );
+    DECLARE CONTINUE HANDLER FOR NOT FOUND SET done = TRUE;
+    OPEN cur;
+    post_del_loop: LOOP
+        FETCH cur INTO post_id;
+        IF done = TRUE THEN
+            LEAVE post_del_loop;
+        END IF;
+        # Daltondalt is the root user.
+        CALL deletePost(post_id, "Daltondalt", did_delete);
+    END LOOP post_del_loop;
+    CLOSE cur;
 END //
 DELIMITER ;
 
@@ -563,5 +594,30 @@ CREATE OR REPLACE PROCEDURE deleteFileRecord(
     IN file_id INT)
 BEGIN
     DELETE FROM files WHERE file_id = files.id;
+END //
+DELIMITER ;
+
+DELIMITER //
+CREATE OR REPLACE PROCEDURE createReport(
+    IN post_id INT,
+    OUT did_create INT)
+BEGIN
+    DECLARE thread_id INT;
+    DECLARE board_dir VARCHAR(12);
+    SET did_create = 0;
+    IF (SELECT reports.post_id FROM reports WHERE reports.post_id = post_id) IS NULL THEN 
+        SELECT posts.thread_id FROM posts WHERE posts.id = post_id INTO thread_id;
+        SELECT boards.directory FROM threads LEFT JOIN boards ON boards.id = threads.board_id WHERE threads.id = thread_id INTO board_dir; 
+        INSERT INTO reports (post_id, thread_id, board_dir) VALUES (post_id, thread_id, board_dir);
+        SET did_create = 1;
+    END IF;
+END //
+DELIMITER ;
+
+DELIMITER //
+CREATE OR REPLACE PROCEDURE deleteReport(
+    IN report_id INT)
+BEGIN
+    DELETE FROM reports WHERE reports.id = report_id;
 END //
 DELIMITER ;

@@ -42,6 +42,8 @@ class ThreadModel extends Model {
         $statement->bindParam(4, $uploader_name, PDO::PARAM_STR, 36);
         $statement->bindParam(5, $file_id, PDO::PARAM_INT);
         $statement->execute();
+        $statement->fetchAll(PDO::FETCH_ASSOC);
+        $statement->nextRowset();
         $results = $statement->fetchAll(PDO::FETCH_ASSOC);
         $thread = $results[0];
         return $thread;

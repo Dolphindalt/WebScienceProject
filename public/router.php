@@ -20,6 +20,7 @@ require_once ROOT_PATH.'3leaf/Controllers/BoardPageController.php';
 require_once ROOT_PATH.'3leaf/Controllers/ThreadPageController.php';
 require_once ROOT_PATH.'3leaf/Controllers/SessionController.php';
 require_once ROOT_PATH.'3leaf/Controllers/UserPageController.php';
+require_once ROOT_PATH.'3leaf/Controllers/ReportController.php';
 
 require_once ROOT_PATH.'framework/Router.php';
 require_once ROOT_PATH.'framework/ExceptionHandler.php';
@@ -114,6 +115,18 @@ $router->add('register/welcome',
 $router->add('user/{username=[a-zA-Z0-9]+}', 
     ['controller' => 'Dalton\ThreeLeaf\Controllers\UserPage', 
     'task' => 'showUserPage', 'method' => 'GET']);
+
+$router->add('reports', 
+    ['controller' => 'Dalton\ThreeLeaf\Controllers\Reports', 
+    'task' => 'showReports', 'method' => 'GET']);
+
+$router->add('reports/{post_id=\d*}', 
+    ['controller' => 'Dalton\ThreeLeaf\Controllers\Reports', 
+    'task' => 'createReport', 'method' => 'POST']);
+
+$router->add('reports/{report_id=\d*}', 
+    ['controller' => 'Dalton\ThreeLeaf\Controllers\Reports', 
+    'task' => 'deleteReport', 'method' => 'DELETE']);
 
 $router->execute($_SERVER['QUERY_STRING'], $_SERVER['REQUEST_METHOD']); 
 

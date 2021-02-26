@@ -38,9 +38,9 @@ if (array_key_exists('error', $args))
 <hr>
 <?php
     $op_post = array_shift($posts);
-    View::render('PostView.php', ['post' => $op_post, 'thread' => $thread, 'post_ids' => $post_ids]);
+    View::render('PostView.php', ['post' => $op_post, 'thread' => $thread, 'post_ids' => $post_ids, 'board' => $board]);
     foreach ($posts as $post) {
-        View::render('PostView.php', ['post' => $post, 'post_ids' => $post_ids]);
+        View::render('PostView.php', ['post' => $post, 'post_ids' => $post_ids, 'board' => $board]);
     }
 ?>
 <?php

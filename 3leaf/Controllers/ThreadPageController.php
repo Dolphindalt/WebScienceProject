@@ -24,6 +24,9 @@ class ThreadPage extends ControllerBase {
 
         $board_directory = strtolower($this->params['dir']);
         $board = BoardModel::getBoardFromDirectory($board_directory);
+        if (!isset($board)) {
+            $this->pageNotFound();
+        }
 
         $thread_id = $this->params['thread'];
         $thread = ThreadModel::getThread($thread_id);

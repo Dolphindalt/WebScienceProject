@@ -13,6 +13,7 @@ if (array_key_exists('thread', $args)) {
 
 $post_ids = $args['post_ids']; // The posts in this thread.
 $post = $args['post'];
+$board = $args['board'];
 
 // Process links to other posts and threads here.
 $callback = function($matches) use ($post_ids) {
@@ -80,7 +81,7 @@ function toggleVisibleByClick(elmnt1, elmnt2) {
                     <div class='dropdown inline'>
                         <span>&#10157;</span>
                         <div class='dropdown-content'>
-                            <p class='dropdown-content-box'><a>Report</a></p>
+                            <p class='dropdown-content-box'><a id='report-<?php echo $post['id']; ?>' onclick='createReport(this);'>Report</a></p>
                             <?php 
                                 if (array_key_exists(USER_ID, $_SESSION) && strtolower($post['username']) == strtolower($_SESSION[USERNAME]) || 
                                     array_key_exists(ROLE, $_SESSION) && $_SESSION[ROLE] == MODERATOR) {

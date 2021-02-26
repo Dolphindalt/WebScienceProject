@@ -26,3 +26,13 @@ LEFT JOIN
 ORDER BY
     threads.post_count DESC
 LIMIT 6;
+
+CREATE OR REPLACE VIEW selectReports
+AS
+SELECT
+    reports.id,
+    reports.post_id,
+    reports.thread_id,
+    reports.board_dir
+FROM
+    reports;

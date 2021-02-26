@@ -74,5 +74,6 @@ use Dalton\ThreeLeaf\Models\BoardModel;
             </div>
         </div>
     </div>
+    <div id="snackbar"></div>
 </body>
 </html>
