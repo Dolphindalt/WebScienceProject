@@ -1,4 +1,4 @@
-USE three_leaf;
+USE dcaron;
 
 DELIMITER //
 CREATE OR REPLACE PROCEDURE getBoardIdFromDirectory(
