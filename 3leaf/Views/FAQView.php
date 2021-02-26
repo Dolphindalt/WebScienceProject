@@ -27,7 +27,8 @@
         </p>
         <h4>How do I report posts?</h4>
         <p>
-            I have not implemented this yet.
+            To report a post, simply find the &#10157; icon. Hovering over this icon will display a dropdown with the report option. Reporting 
+            posts for no reason may get you banned.
         </p>
         <h4>Why is my post gone?</h4>
         <p>
