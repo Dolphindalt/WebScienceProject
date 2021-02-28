@@ -27,6 +27,8 @@ class Session extends ControllerBase {
     }
 
     public function processLoginFormTask() {
+        // Honey pot tactic to prevent bot spam.
+        if(!empty($_POST['website'])) die();
         $username = $_POST['username'];
         $password = $_POST['password'];
 
@@ -46,6 +48,8 @@ class Session extends ControllerBase {
     }
 
     public function processRegisterFormTask() {
+        // Honey pot tactic to prevent bot spam.
+        if(!empty($_POST['website'])) die();
         $username = $_POST['username'];
         $password = $_POST['password'];
         

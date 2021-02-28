@@ -22,6 +22,7 @@ if (isset($args['error'])) {
         <form id='loginForm' method='post' name='loginForm' enctype='multipart/form-data' class='form-style'>
             <span><input class='form-input' type='text' name='username' id='username' placeholder="Username" <?php if (isset($_POST['username'])) { echo "value='" . $_POST['username'] . "'"; }?> /></span>
             <span><input class='form-input' type='password' name='password' id='password' placeholder="Password"/></span>
+            <input style="display: none;" type="text" id="website" name="website"/>
             <button id='loginSubmit' class='center'>Login</button>
             <?php
             if (isset($error)) {

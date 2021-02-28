@@ -36,6 +36,12 @@
             10 active threads at a time. Your post may have been deleted due to a rule violation. Please do not 
             reupload a post you suspect was deleted.
         </p>
+        <h4>Can I delete posts or threads</h4>
+        <p>
+            Users are able to delete their own posts or entire threads. Deleting the first post of the thread will delete the entire thread, 
+            including all other posts. To delete a post, simply find the &#10157; icon. Hovering over this icon will display a dropdown with 
+            the delete option.
+        </p>
         <h4>Why is my thread not bumping to the top of the page?</h4>
         <p>
             Threads that reach the post limit of 10 will no longer bump to the top of the page after a reply. This is to limit the 

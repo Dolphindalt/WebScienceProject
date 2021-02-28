@@ -85,6 +85,9 @@ class Threads extends ControllerBase {
     }
 
     public function createThreadTask() {
+        // Honey pot tactic to prevent bot spam.
+        if(!empty($_POST['website'])) die();
+
         if (!array_key_exists('dir', $this->params)) {
             $this->pageNotFound();
         }
@@ -135,6 +138,9 @@ class Threads extends ControllerBase {
     }
 
     public function createPostOnThreadTask() {
+        // Honey pot tactic to prevent bot spam.
+        if(!empty($_POST['website'])) die();
+        
         $board_dir = $this->params['dir'];
         $thread_id = $this->params['thread'];
         $content = $_POST['comment'];
