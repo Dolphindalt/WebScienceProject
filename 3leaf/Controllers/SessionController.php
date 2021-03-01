@@ -60,7 +60,7 @@ class Session extends ControllerBase {
             die();
         }
 
-        if (!preg_match('/[a-zA-Z0-9]+/', $username)) {
+        if (!preg_match('/^[a-zA-Z0-9]{3,16}$/', $username)) {
             http_response_code(409);
             $this->error = "Usernames should only contain alphanumeric characters.";
             $this->showRegisterPageTask();
