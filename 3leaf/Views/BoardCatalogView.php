@@ -39,7 +39,7 @@ if (array_key_exists('error', $args))
                 ?>
 
                 <div class='catalog-container'>
-                    <a href='index.php?board/dir=r/thread=<?php echo $thread['id']; ?>'>
+					<a href='index.php?board/dir=<?php echo $board['directory']; ?>/thread=<?php echo $thread['id']; ?>'>
                         <img class='catalog-image' src='post_images/<?php echo $post['file_name']; ?>'/>
                     </a>
                     <p>R: <?php echo $thread['post_count']; ?> I: <?php echo $thread['image_count']; ?></p>
