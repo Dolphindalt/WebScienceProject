@@ -78,11 +78,11 @@ $router->add('threads/{board=[a-zA-Z]*}',
 
 $router->add('threads/{thread_id=\d*}', 
     ['controller' => 'Dalton\ThreeLeaf\Controllers\Threads', 
-    'task' => 'deleteThread', 'method' => 'DELETE']);
+    'task' => 'deleteThread', 'method' => 'POST']);
 
 $router->add('posts/{post_id=\d*}', 
     ['controller' => 'Dalton\ThreeLeaf\Controllers\Threads', 
-    'task' => 'deletePost', 'method' => 'DELETE']);
+    'task' => 'deletePost', 'method' => 'POST']);
 
 $router->add('login',
     ['controller' => 'Dalton\ThreeLeaf\Controllers\Session', 
@@ -126,7 +126,7 @@ $router->add('reports/{post_id=\d*}',
 
 $router->add('reports/{report_id=\d*}', 
     ['controller' => 'Dalton\ThreeLeaf\Controllers\Reports', 
-    'task' => 'deleteReport', 'method' => 'DELETE']);
+    'task' => 'deleteReport', 'method' => 'POST']);
 
 $router->execute($_SERVER['QUERY_STRING'], $_SERVER['REQUEST_METHOD']); 
 

@@ -27,7 +27,7 @@ class Threads extends ControllerBase {
         echo json_encode($boardThreads);
     }
 
-    public function deletePostTask() {
+	public function deletePostTask() {
         if (!array_key_exists('post_id', $this->params)) {
             $this->pageNotFound();
         }
@@ -55,7 +55,7 @@ class Threads extends ControllerBase {
         }
     }
 
-    public function deleteThreadTask() {
+	public function deleteThreadTask() {
         if (!array_key_exists('thread_id', $this->params)) {
             $this->pageNotFound();
         }
@@ -195,7 +195,7 @@ class Threads extends ControllerBase {
         // Create reply records for posts replied to in this new post.
         $matches = [];
 		preg_match_all('/(&gt;&gt;)([0-9]+)/', $content, $matches);
-		$matches = array_unique($matches);
+		$matches = array_unique($matches, SORT_REGULAR);
         if (!empty($matches) && array_key_exists(2, $matches)) {
             foreach ($matches[2] as $digits) {
                 PostModel::addReplyToPost($digits, $post_id);

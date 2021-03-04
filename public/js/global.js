@@ -112,7 +112,7 @@ function deleteThread(clicked_elmnt, board_dir) {
     let thread_id = elm_id.substring(7, elm_id.length);
     $.ajax({
         url: "index.php?threads/thread_id=" + thread_id,
-        type: "DELETE",
+        type: "POST",
         success: () => {
             window.location.replace("index.php?board/dir=" + board_dir);
             showSnackbar('Thread deleted.');
@@ -129,7 +129,7 @@ function deletePost(clicked_elmnt) {
     let post_id = elm_id.substring(7, elm_id.length);
     $.ajax({
         url: "index.php?posts/post_id=" + post_id,
-        type: "DELETE",
+        type: "POST",
         success: () => {
             window.location.reload();
             showSnackbar('Post deleted.');
@@ -161,7 +161,7 @@ function deleteReport(clicked_elmnt) {
     let report_id = elm_id.substring(7, elm_id.length);
     $.ajax({
         url: "index.php?reports/report_id=" + report_id,
-        type: "DELETE",
+        type: "POST",
         success: () => {
             window.location.reload();
         },
