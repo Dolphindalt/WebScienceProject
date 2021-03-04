@@ -125,8 +125,12 @@ class Threads extends ControllerBase {
         $content = $this->strip_html($content);
         $content = nl2br($content);
         $content = $this->strip_slashes_and_non_spaces($content);
+        $content = $this->addGreentext($content);
         $thread_name = $this->strip_html_and_slashes_and_non_spaces($thread_name);
         $thread = ThreadModel::createThread($board_dir, $thread_name, $content, $_SESSION[USERNAME], $file_id);
+        $post_id = $thread['post_id']; // Only works for createThread.
+
+        $this->createRepliesOnPost($post_id, $content);
 
         ?>
             <script>
@@ -183,6 +187,7 @@ class Threads extends ControllerBase {
         $content = $this->strip_html($content);
         $content = nl2br($content);
         $content = $this->strip_slashes_and_non_spaces($content);
+        $content = $this->addGreentext($content);
 
         ?>
             <script>
@@ -193,6 +198,12 @@ class Threads extends ControllerBase {
         $post_id = PostModel::createPostInThread($board_dir, $thread_id, $content, $_SESSION[USERNAME], $file_id);
 
         // Create reply records for posts replied to in this new post.
+        $this->createRepliesOnPost($post_id, $content);
+
+        header('Location: index.php?board/dir=' . $board_dir . '/thread=' . $thread_id . '#p' . $post_id);
+    }
+
+    private function createRepliesOnPost($post_id, $content) {
         $matches = [];
 		preg_match_all('/(&gt;&gt;)([0-9]+)/', $content, $matches);
 		$matches = array_unique($matches, SORT_REGULAR);
@@ -201,8 +212,11 @@ class Threads extends ControllerBase {
                 PostModel::addReplyToPost($digits, $post_id);
             }
         }
+    }
 
-        header('Location: index.php?board/dir=' . $board_dir . '/thread=' . $thread_id . '#p' . $post_id);
+    private function addGreentext($content) {
+        $new_content = preg_replace('/^(&gt;){1}[^&]*(<br>)?(<br\/>)?\n?\r?$/m', '<p style="color:#42a357;">\0</p>', $content);
+        return $new_content;
     }
 
     private function showErrorOnBoardCatalog($dir, $error) {

@@ -404,7 +404,13 @@ ul {
 .post-content-wrapper {
     padding-left: 1em;
     padding-right: 1em;
+    padding-bottom: 0.5em;
     width: 100%;
+}
+
+.post-content p {
+    margin: 0;
+    padding: 0;
 }
 
 .post-header p {
@@ -413,6 +419,10 @@ ul {
 
 .post-header h4 {
     margin: 0;
+}
+
+.post-header {
+    margin-bottom: 14px;
 }
 
 .post-image {

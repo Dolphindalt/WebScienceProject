@@ -25,7 +25,7 @@ $callback = function($matches) use ($post_ids) {
 
     $post_reply = PostModel::selectPostIDsFromPostID($digits);
     if ($post_reply == null) {
-        return '<a class="text-link style=\'text-decoration: line-through;\'>'. $carrots . $digits . '</a>';
+        return "<a class='text-link' style='text-decoration: line-through;'>". $carrots . $digits . '</a>';
     }
 
     return "<a class='text-link' href='index.php?board/dir=" . $post_reply['directory'] . "/thread=" . $post_reply['thread_id'] . "#p" . $digits . "'>". $carrots . $digits . "</a>";
