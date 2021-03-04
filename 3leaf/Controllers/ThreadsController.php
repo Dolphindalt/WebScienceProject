@@ -194,7 +194,8 @@ class Threads extends ControllerBase {
 
         // Create reply records for posts replied to in this new post.
         $matches = [];
-        preg_match_all('/(&gt;&gt;)([0-9]+)/', $content, $matches);
+		preg_match_all('/(&gt;&gt;)([0-9]+)/', $content, $matches);
+		$matches = array_unique($matches);
         if (!empty($matches) && array_key_exists(2, $matches)) {
             foreach ($matches[2] as $digits) {
                 PostModel::addReplyToPost($digits, $post_id);
