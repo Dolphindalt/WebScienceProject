@@ -215,7 +215,7 @@ class Threads extends ControllerBase {
     }
 
     private function addGreentext($content) {
-        $new_content = preg_replace('/^(&gt;){1}[^&\n\r<]*(<br>)?(<br\/>)?\n?\r?/m', '<p style="color:#42a357;">\0</p>', $content);
+        $new_content = preg_replace('/^(&gt;){1}[^&\n\r<]*(<br>)?(<br\/>)?\n?\r?/m', '<span style="color:#2caa30;">\0</span>', $content);
         return $new_content;
     }
 
