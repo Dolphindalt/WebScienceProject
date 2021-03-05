@@ -150,8 +150,14 @@ function createReport(clicked_elmnt) {
         success: () => {
             showSnackbar('Report created.');
         },
-        error: () => {
-            showSnackbar('This post is already reported.');
+        error: (xhr) => {
+            if (xhr.status == 401) {
+                showSnackbar('Login to do this.');
+            } else if (xhr.status == 409) {
+                showSnackbar('This post is already reported.');
+            } else {
+                showSnackbar('Something went wrong.');
+            }
         }
     });
 }
