@@ -53,9 +53,7 @@ CREATE OR REPLACE PROCEDURE selectThreadsFromBoard(
     IN board_directory VARCHAR(12))
 BEGIN
     DECLARE board_id INT;
-    DECLARE board_thread_limit INT;
     CALL getBoardIdFromDirectory(board_directory, board_id);
-    SELECT boards.thread_limit FROM boards WHERE boards.id = board_id INTO board_thread_limit;
     SELECT
         threads.id,
         threads.post_count,
@@ -65,11 +63,9 @@ BEGIN
     FROM
         threads
     WHERE
-        board_id = threads.board_id
+        board_id = threads.board_id AND threads.is_archived = 0
     ORDER BY
-        threads.time_updated DESC
-    LIMIT
-        board_thread_limit;
+        threads.time_updated DESC;
 END //
 DELIMITER ;
 
@@ -98,13 +94,9 @@ BEGIN
     FROM
         threads
     WHERE
-        board_id = threads.board_id
+        board_id = threads.board_id AND threads.is_archived = 1
     ORDER BY
-        threads.time_updated DESC
-    LIMIT # This is interesting but MySQL suggests we use a cap so I would rather use archive_limit than max INT.
-          # Threads should not live very long anyways so the archive will not grow large.
-          # If not, then we just do not show old archived threads that will be pruned.
-        archive_limit OFFSET thread_limit;
+        threads.time_updated DESC;
 END //
 DELIMITER ;
 
