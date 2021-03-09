@@ -372,6 +372,7 @@ ul {
     text-align: center;
     width: 220px;
     max-height: 440px;
+	padding-bottom: 1em;
 }
 
 .catalog-container p {
