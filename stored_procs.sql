@@ -275,7 +275,7 @@ BEGIN
     CALL createPost(board_directory, thread_id, content, uploader_name, file_id);
     # Archive the sliding thread if it exists. This is the thread that slid off the page.
     SELECT boards.thread_limit FROM boards WHERE boards.id = board_id INTO board_thread_limit;
-    UPDATE threads SET threads.is_archived = 1 WHERE threads.id = (SELECT threads.id FROM threads ORDER BY threads.time_updated DESC LIMIT 1 OFFSET board_thread_limit);
+    UPDATE threads SET threads.is_archived = 1 WHERE threads.id = (SELECT threads.id FROM threads WHERE threads.board_id = board_id ORDER BY threads.time_updated DESC LIMIT 1 OFFSET board_thread_limit);
     CALL pruneOldThreads(board_id);
     CALL selectThreadById(thread_id);
 END //
