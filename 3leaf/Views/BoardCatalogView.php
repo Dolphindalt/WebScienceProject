@@ -22,7 +22,13 @@ if (array_key_exists('error', $args))
 ?>
         <div class='center'>
             <div class='inline'>
-                <div id='modal-show'><h2 class='post-thread-header-text'>[Post new thread]</h2></div>
+                <?php
+                    if (isset($_SESSION) && array_key_exists(LOGGED_IN, $_SESSION) && $_SESSION[LOGGED_IN]) {
+                        echo "<div id='modal-show'><h2 class='post-thread-header-text'>[Post new thread]</h2></div>";
+                    } else {
+                        echo "<div><h2 class='post-thread-header-text' onclick='showSnackbar(\"Please login to make a thread.\");'>[Post new thread]</h2></div>";
+                    }
+                ?>
             </div>
                 <div class='inline'><a class='post-thread-header-text' href='index.php?board/archive/dir=<?php echo $board['directory']; ?>'><h2>[Archive]</h2></a></div>
         </div>

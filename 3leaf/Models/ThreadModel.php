@@ -30,7 +30,7 @@ class ThreadModel extends Model {
         $statement->bindParam(1, $thread_id, PDO::PARAM_STR);
         $statement->execute();
         $results = $statement->fetchAll(PDO::FETCH_ASSOC);
-        return $results[0];
+        return !empty($results[0]) ? $results[0] : [];
     }
 
     public static function createThread($board_dir, 

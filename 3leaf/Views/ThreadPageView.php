@@ -26,7 +26,13 @@ if (array_key_exists('error', $args))
         if (!$thread['is_archived']) {
     ?>
             <div class='inline'><a class='post-thread-header-text' href='index.php?board/dir=<?php echo $board['directory']; ?>'><h2>[Catalog]</h2></a></div>
-            <div id='modal-show' class='inline'><h2 class='post-thread-header-text'>[Reply]</h2></div>
+            <?php
+                if (isset($_SESSION) && array_key_exists(LOGGED_IN, $_SESSION) && $_SESSION[LOGGED_IN]) {
+                    echo "<div id='modal-show' class='inline'><h2 class='post-thread-header-text'>[Reply]</h2></div>";
+                } else {
+                    echo "<div class='inline' onclick='showSnackbar(\"Please login to make a reply.\");'><h2 class='post-thread-header-text'>[Reply]</h2></div>";
+                }
+            ?>
     <?php
         } else {
     ?>
@@ -38,9 +44,9 @@ if (array_key_exists('error', $args))
 <hr>
 <?php
     $op_post = array_shift($posts);
-    View::render('PostView.php', ['post' => $op_post, 'thread' => $thread, 'post_ids' => $post_ids, 'board' => $board]);
+    View::render('PostView.php', ['post' => $op_post, 'thread' => $thread, 'post_ids' => $post_ids, 'board' => $board, 'op_id' => $op_post['id']]);
     foreach ($posts as $post) {
-        View::render('PostView.php', ['post' => $post, 'post_ids' => $post_ids, 'board' => $board]);
+        View::render('PostView.php', ['post' => $post, 'post_ids' => $post_ids, 'board' => $board, 'op_id' => $op_post['id']]);
     }
 ?>
 <?php

@@ -126,6 +126,7 @@ class Threads extends ControllerBase {
         $content = nl2br($content);
         $content = $this->strip_slashes_and_non_spaces($content);
         $content = $this->addGreentext($content);
+        $content = $this->addLinks($content);
         $thread_name = $this->strip_html_and_slashes_and_non_spaces($thread_name);
         $thread = ThreadModel::createThread($board_dir, $thread_name, $content, $_SESSION[USERNAME], $file_id);
         $post_id = $thread['post_id']; // Only works for createThread.
@@ -188,6 +189,7 @@ class Threads extends ControllerBase {
         $content = nl2br($content);
         $content = $this->strip_slashes_and_non_spaces($content);
         $content = $this->addGreentext($content);
+        $content = $this->addLinks($content);
 
         ?>
             <script>
@@ -216,6 +218,11 @@ class Threads extends ControllerBase {
 
     private function addGreentext($content) {
         $new_content = preg_replace('/^(&gt;){1}[^&\n\r<]+(<br>)?(<br\/>)?\n?\r?/m', '<span style="color:#1b6b1e;">\0</span>', $content);
+        return $new_content;
+    }
+
+    private function addLinks($content) {
+        $new_content = preg_replace('/[a-z]+:\/\/\S+/', '<a href="\0">\0</a>', $content);
         return $new_content;
     }
 

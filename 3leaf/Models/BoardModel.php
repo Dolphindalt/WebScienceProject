@@ -40,7 +40,7 @@ class BoardModel extends Model {
         $statement->bindParam(1, $dir, PDO::PARAM_STR);
         $result_set = $statement->execute();
         $result = $statement->fetchAll(PDO::FETCH_ASSOC);
-        return $result[0];
+        return !empty($result) ? $result[0] : null;
     }
 
 }

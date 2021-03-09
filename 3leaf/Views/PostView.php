@@ -14,13 +14,18 @@ if (array_key_exists('thread', $args)) {
 $post_ids = $args['post_ids']; // The posts in this thread.
 $post = $args['post'];
 $board = $args['board'];
+$op_post_id = $args['op_id'];
 
 // Process links to other posts and threads here.
-$callback = function($matches) use ($post_ids) {
+$callback = function($matches) use ($post_ids, $op_post_id) {
     $carrots = $matches[1];
     $digits = $matches[2];
     if (in_array($digits, $post_ids)) {
-        return '<a class="text-link" href=\'#p' . $digits . '\'>'. $carrots . $digits . '</a>';
+        $ext = "";
+        if ((int) $digits == (int) $op_post_id) {
+            $ext = " (OP)";
+        }
+        return '<a class="text-link" href=\'#p' . $digits . '\'>'. $carrots . $digits . $ext . '</a>';
     }
 
     $post_reply = PostModel::selectPostIDsFromPostID($digits);
@@ -73,11 +78,12 @@ function toggleVisibleByClick(elmnt1, elmnt2) {
         ?>
         <div class='post-content-wrapper'>
             <div class='post-header'>
-                <p id='<?php echo 'pid' . $post['id']; ?>' class='info-text inline post-id' onclick='onPostIDClick(this)'>post no. <?php echo $post['id']; ?></p>
                 <?php if (isset($thread)) { ?>
-                    <h4 class='inline'><?php echo $thread['name']; ?></h4><br>
+                    <h4 class='inline'><?php echo $thread['name']; ?></h4>
                 <?php } ?>
-                    <p class='posted-by-text inline'>by <a class='posted-by-text-link' href='index.php?user/username=<?php echo $post['username']; ?>'><?php echo $post['username'] ?></a> at <?php echo $post['time_created'] ?></p>
+                    <p class='posted-by-text inline'><a class='posted-by-text-link' href='index.php?user/username=<?php echo $post['username']; ?>'><?php echo $post['username'] ?></a> <?php echo date('d/m/y h:i A', strtotime($post['time_created'])); ?></p>
+                    <p id='<?php echo 'pid' . $post['id']; ?>' class='info-text inline post-id' onclick='onPostIDClick(this)'>no.<?php echo $post['id']; ?></p>
+
                     <div class='dropdown inline'>
                         <span>&#10157;</span>
                         <div class='dropdown-content'>

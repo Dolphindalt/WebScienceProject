@@ -25,10 +25,12 @@ class FileUpload extends ControllerBase {
         if ($img_file == '') {
             $results['error'] = 'The image is required.';
             return $results;
-        } else if (!in_array($file_extension, VALID_EXTENSIONS)) {
+        }
+        if (!in_array($file_extension, VALID_EXTENSIONS)) {
             $results['error'] = 'Image type not supported.';
             return $results;
-        } else if (($_FILES['image']['size'] > 2000000)) {
+        }
+        if (($_FILES['image']['size'] > 2000000)) {
             $results['error'] = 'Image size is larger than 2MB.';
             return $results;
         }
@@ -53,10 +55,12 @@ class FileUpload extends ControllerBase {
         if ($img_file == '') {
             $results['id'] = null;
             return $results;
-        } else if (!in_array($file_extension, VALID_EXTENSIONS)) {
+        }
+        if (!in_array($file_extension, VALID_EXTENSIONS)) {
             $results['error'] = 'Image type not supported.';
             return $results;
-        } else if (($_FILES['image']['size'] > 2000000)) {
+        }
+        if (($_FILES['image']['size'] > 2000000)) {
             $results['error'] = 'Image size is larger than 2MB.';
             return $results;
         }
