@@ -371,6 +371,7 @@ ul {
     padding-right: 0.5em;
     padding-top: 0.25em;
     padding-bottom: 0.25em;
+    background-color: var(--container-wrapper);
     color: var(--variable-text-color);
 }
 /* End container system. */
