@@ -36,32 +36,30 @@ if (array_key_exists('error', $args))
 <?php
     }
 ?>
-<div class='container-content' style="border: 1px solid var(--text-color)">
-    <div class='board-catalog-grid'>
-        <?php
-            if (!empty($threads)) {
-                for ($i = 0; $i < sizeof($threads); $i++) {
-                    $thread = $threads[$i];
-                    $post = $rootPosts[$i];
-                    ?>
+<div class='board-catalog-grid'>
+    <?php
+        if (!empty($threads)) {
+            for ($i = 0; $i < sizeof($threads); $i++) {
+                $thread = $threads[$i];
+                $post = $rootPosts[$i];
+                ?>
 
-                    <div class='catalog-container'>
-                        <a href='index.php?board/dir=<?php echo $board['directory']; ?>/thread=<?php echo $thread['id']; ?>'>
-                            <img class='catalog-image' src='post_images/<?php echo $post['file_name']; ?>'/>
-                        </a>
-                        <p>R: <?php echo $thread['post_count']; ?> I: <?php echo $thread['image_count']; ?></p>
-                        <p class='info-text'>thread no. <?php echo $thread['id']; ?></p>
-                        <p class='posted-by-text'>by <a class='posted-by-text-link' href='index.php?user/username=<?php echo $post['username']; ?>'><?php echo $post['username'] ?></a></p>
-                        <h4><?php echo $thread['name']; ?></h4>
-                    </div>
+                <div class='catalog-container'>
+                    <a href='index.php?board/dir=<?php echo $board['directory']; ?>/thread=<?php echo $thread['id']; ?>'>
+                        <img class='catalog-image' src='post_images/<?php echo $post['file_name']; ?>'/>
+                    </a>
+                    <p>R: <?php echo $thread['post_count']; ?> I: <?php echo $thread['image_count']; ?></p>
+                    <p class='info-text'>thread no. <?php echo $thread['id']; ?></p>
+                    <p class='posted-by-text'>by <a class='posted-by-text-link' href='index.php?user/username=<?php echo $post['username']; ?>'><?php echo $post['username'] ?></a></p>
+                    <h4><?php echo $thread['name']; ?></h4>
+                </div>
 
-                <?php
-                }
-            } else {
-                echo "<h4 class='center'>No threads yet!</h4>";
+            <?php
             }
-        ?>
-    </div>
+        } else {
+            echo "<h4 class='center'>No threads yet!</h4>";
+        }
+    ?>
 </div>
 <?php 
     $args = ['board' => $board];
