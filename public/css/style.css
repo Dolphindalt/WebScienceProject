@@ -1,3 +1,42 @@
+/* CSS variables. */
+:root {
+    --main-header: #e11847;
+    --error-message: #e11847;
+    --container-header: #e05f7b;
+    --container-wrapper: #ebcfd4;
+    --post-wrapper: #ec9d9d;
+    --post-wrapper-hover: #e9c3c3;
+    --dropdown-color: #e092a3;
+    --sidenav-header: #ca7be9;
+    --sidenav-background: #e1c6ec;
+    --background-image: linear-gradient(rgba(231, 93, 120, 0.5), rgba(225, 24, 71, 0.0));
+    --text-color: black;
+    --variable-text-color: black;
+    --link-text: #551A8B;
+    --posted-by-text-color: rgb(38, 38, 219);
+    --info-text-color: #147714;
+    --text-link-color: rgb(38, 38, 219);;
+}
+
+[data-theme="dark"] {
+    --main-header: #ff003c;
+    --error-message: #ff003c;
+    --container-header: #550012;
+    --container-wrapper: #110104;
+    --post-wrapper: #570000;
+    --post-wrapper-hover: #251010;
+    --dropdown-color: #570000;
+    --sidenav-header: #762394;
+    --sidenav-background: #402c47;
+    --background-image: linear-gradient(rgba(97, 1, 22, 0.905), rgba(0, 0, 0, 1.0));
+    --text-color: black;
+    --variable-text-color: white;
+    --link-text: #c68aff;
+    --posted-by-text-color: rgb(70, 70, 255);
+    --info-text-color: #48ff48;
+    --text-link-color: rgb(70, 70, 255);
+}
+
 /* Misc globals. */
 body {
     font-family: Verdana, Geneva, Tahoma, sans-serif;
@@ -6,6 +45,7 @@ body {
     margin: 0px;
     width: 100%;
     height: 100%;
+    color: var(--text-color);
 }
 
 div {
@@ -13,23 +53,36 @@ div {
     padding: 0;
 }
 
+li {
+    color: var(--variable-text-color);
+}
+
+p {
+    color: var(--variable-text-color);
+}
+
+span {
+    color: var(--variable-text-color);
+}
+
 h1 {
-    color: #e11847;
+    color: var(--main-header);
     font-family: 'Courier New', Courier, monospace;
 }
 
 h2 {
     margin: 0;
     font-family: 'Courier New', Courier, monospace;
+    color: var(--variable-text-color);
 }
 
 h4 {
-    color: #e11847;
+    color: var(--main-header);
     margin: 0;
 }
 
 hr {
-    border-top: 1px solid #e092a3;
+    border-top: 1px solid var(--dropdown-color);
     margin-top: 1em;
     margin-bottom: 1em;
 }
@@ -42,18 +95,18 @@ textarea {
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     margin-bottom: 14px * 2;
     border: none;
-    border-bottom: 5px solid black;
-    background: #ebcfd4;
+    border-bottom: 5px solid var(--text-color);
+    background: var(--container-wrapper);
     min-width: 250px;
     padding-left: 5px;
     outline: none;
-    color: black;
+    color: var(--text-color);
     padding: 12px 0px;
     padding-left: 0.2em;
 }
 
 textarea:focus {
-    border-bottom: 5px solid #e05f7b;
+    border-bottom: 5px solid var(--container-header);
 }
 
 input[type='text'], input[type='password'] {
@@ -64,18 +117,18 @@ input[type='text'], input[type='password'] {
     font-family: Verdana, Geneva, Tahoma, sans-serif;
     margin-bottom: 14px * 2;
     border: none;
-    border-bottom: 5px solid black;
-    background: #ebcfd4;
+    border-bottom: 5px solid var(--text-color);
+    background: var(--container-wrapper);
     min-width: 250px;
     padding-left: 5px;
     outline: none;
-    color: black;
+    color: var(--variable-text-color);
     padding: 12px 0px;
     padding-left: 0.2em;
 }
 
 input:focus {
-  border-bottom: 5px solid #e05f7b;
+  border-bottom: 5px solid var(--container-header);
 }
 
 button {
@@ -83,20 +136,21 @@ button {
   margin: 0 auto;
   line-height: 14px * 2;
   padding: 5px 20px;
-  background: #e05f7b;
+  background: var(--container-header);
   letter-spacing: 2px;
   transition: .2s all ease-in-out;
   outline: none;
-  border: 1px solid rgba(0,0,0,1);
+  border: 1px solid var(--text-color);
   margin: 16px 0px;
   margin-bottom: 8px;
   font-family: 'Courier New', Courier, monospace;
+  color: var(--variable-text-color);
 }
 
 button:hover {
-    background: rgba(0,0,0,1);
-    color: #e05f7b;
-    border: 1px solid rgba(0,0,0,1);
+    background: var(--text-color);
+    color: var(--variable-text-color);
+    border: 1px solid var(--text-color);
 }
 
 input[type='file'] {
@@ -104,38 +158,38 @@ input[type='file'] {
     margin: 0 auto;
     line-height: 14px * 2;
     padding: 5px 20px;
-    background: #e05f7b;
+    background: var(--container-header);
     letter-spacing: 2px;
     transition: .2s all ease-in-out;
     outline: none;
-    border: 1px solid rgba(0,0,0,1);
+    border: 1px solid var(--text-color);
     margin: 16px 0px;
     margin-bottom: 8px;
     font-family: 'Courier New', Courier, monospace;
   }
   
 input[type='file']:hover {
-    background: rgba(0,0,0,1);
-    color: #e05f7b;
-    border: 1px solid rgba(0,0,0,1);
+    background: var(--text-color);
+    color: var(--container-header);
+    border: 1px solid var(--text-color);
 }
 
 .error-text {
-    color: #e11847;
+    color: var(--error-message);
 }
 
 .info-text {
-    color: #147714;
+    color: var(--info-text-color);
     font-weight: bold;
 }
 
 .posted-by-text {
-    color: rgb(38, 38, 219);
+    color: var(--posted-by-text-color);
     font-weight: bold;
 }
 
 .posted-by-text-link {
-    color: rgb(38, 38, 219);
+    color: var(--posted-by-text-color);
     font-weight: bold;
 }
 
@@ -144,7 +198,7 @@ input[type='file']:hover {
 }
 
 .posted-by-text-link:visited {
-    color: rgb(38, 38, 219);
+    color: var(--posted-by-text-color);
 }
 
 .home-grid-container {
@@ -154,7 +208,7 @@ input[type='file']:hover {
     width: 100%;
     position: absolute;
     left: 200px;
-    background-image: linear-gradient(rgba(231, 93, 120, 0.5), rgba(225, 24, 71, 0.0));
+    background-image: var(--background-image);
     background-size: cover;
     background-repeat: no-repeat;
     overflow-x: hidden;
@@ -190,11 +244,11 @@ input[type='file']:hover {
 
 .text-link {
     text-decoration: underline;
-    color: #0000EE;
+    color: var(--text-link-color);
 }
 
 .text-link:visited {
-    color: #0000EE;
+    color: var(--text-link-color);
 }
 /* End misc globals. */
 
@@ -231,7 +285,7 @@ input[type='file']:hover {
     top: 0;
     left: 0;
     overflow-x: hidden;
-    background-color: #e1c6ec;
+    background-color: var(--sidenav-background);
     padding-top: 20px;
     position: fixed;
     border-right: 1px solid;
@@ -252,7 +306,7 @@ input[type='file']:hover {
     text-align: center;
     font-size: 16px;
     font-weight: bold;
-    background-color: #ca7be9;
+    background-color: var(--sidenav-header);
     border: 1px solid;
 }
 
@@ -261,13 +315,18 @@ input[type='file']:hover {
     text-decoration: none;
     display: block;
     font-size: 16px;
-    color: #551A8B;
+    color: var(--link-text);
+}
+
+.sidenav-text {
+    color: var(--link-text);
+    font-size: 16px;
 }
 
 span a {
     text-decoration: none;
     font-size: 16px;
-    color: #551A8B;
+    color: var(--link-text);
 }
 
 .post-id {
@@ -275,7 +334,7 @@ span a {
 }
 
 .post-id:hover {
-    color: #551A8B;
+    color: var(--link-text);
     cursor: pointer;
 }
 
@@ -292,7 +351,7 @@ ul {
     border-color: currentColor;
     margin-bottom: 0.5em;
     padding-bottom: 0.5em;
-    background-color: #ebcfd4;
+    background-color: var(--container-wrapper);
     width: 57.69em;
     margin-left: auto;
     margin-right: auto;
@@ -301,7 +360,7 @@ ul {
 .container-header {
     padding-left: 0.5em;
     padding-right: 0.5em;
-    background-color: #e05f7b;
+    background-color: var(--container-header);
     background-repeat: repeat;
     background-clip: border-box;
     background-origin: padding-box;
@@ -312,6 +371,7 @@ ul {
     padding-right: 0.5em;
     padding-top: 0.25em;
     padding-bottom: 0.25em;
+    color: var(--variable-text-color);
 }
 /* End container system. */
 
@@ -393,13 +453,13 @@ ul {
 .post-wrapper {
     height: inherit;
     width: inherit;
-    background-color: #ec9d9d;
+    background-color: var(--post-wrapper);
     padding: 0.5em;
     display: flex;
 }
 
 .post-wrapper:target {
-    background-color: #e9c3c3;
+    background-color: var(--post-wrapper-hover);
 }
 
 .post-content-wrapper {
@@ -460,11 +520,11 @@ ul {
 
 .dropdown-content-box {
     border: 1px solid;
-    background-color: #e9c3c3;
+    background-color: var(--post-wrapper-hover);
 }
 
 .dropdown-content-box:hover {
-    background-color: #e092a3;
+    background-color: var(--dropdown-color);
     cursor: grab;
 }
 
@@ -482,7 +542,7 @@ ul {
 /* Misc. */
 .post-thread-header-text {
     text-decoration: none;
-    color: black;
+    color: var(--variable-text-color);
     cursor: pointer;
 }
 

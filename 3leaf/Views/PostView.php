@@ -33,7 +33,7 @@ $callback = function($matches) use ($post_ids, $op_post_id) {
         return "<a class='text-link' style='text-decoration: line-through;'>". $carrots . $digits . '</a>';
     }
 
-    return "<a class='text-link' href='index.php?board/dir=" . $post_reply['directory'] . "/thread=" . $post_reply['thread_id'] . "#p" . $digits . "'>". $carrots . $digits . "</a>";
+    return "<a class='text-link' href='index.php?board/dir=" . $post_reply['directory'] . "/thread=" . $post_reply['thread_id'] . "#p" . $digits . "'>". $carrots . $digits . "&#8594;" . $post_reply['directory'] . "</a>";
 };
 
 $post['content'] = preg_replace_callback('/(&gt;&gt;)([0-9]+)/', $callback, $post['content']);
@@ -104,8 +104,8 @@ function toggleVisibleByClick(elmnt1, elmnt2) {
                 <?php
                     if (!empty($reply_ids)) {
                         foreach ($reply_ids as $reply_id) {
+                            echo '&nbsp;';
                             if (in_array($reply_id, $post_ids)) {
-                                echo ' ';
                                 echo '<a class="text-link" href=\'#p' . $reply_id . '\'>>>' . $reply_id . '</a>';
                             } else {
                                 $post_reply = PostModel::selectPostIDsFromPostID($reply_id);

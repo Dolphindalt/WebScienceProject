@@ -25,7 +25,7 @@ if (array_key_exists('error', $args))
     <?php 
         if (!$thread['is_archived']) {
     ?>
-            <div class='inline'><a class='post-thread-header-text' href='index.php?board/dir=<?php echo $board['directory']; ?>'><h2>[Catalog]</h2></a></div>
+            <div class='inline'><h2><a class='post-thread-header-text' href='index.php?board/dir=<?php echo $board['directory']; ?>'>[Catalog]</a></h2></div>
             <?php
                 if (isset($_SESSION) && array_key_exists(LOGGED_IN, $_SESSION) && $_SESSION[LOGGED_IN]) {
                     echo "<div id='modal-show' class='inline'><h2 class='post-thread-header-text'>[Reply]</h2></div>";
