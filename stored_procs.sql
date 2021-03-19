@@ -651,3 +651,30 @@ BEGIN
     END IF;
 END //
 DELIMITER ;
+
+DELIMITER //
+CREATE OR REPLACE PROCEDURE pullThreadsForHomepage(
+    IN amount INT
+)
+BEGIN
+    SELECT
+        threads.id,
+        threads.post_count,
+        threads.image_count,
+        threads.name,
+        users.username,
+        boards.directory
+    FROM
+        threads
+    LEFT JOIN users
+        ON users.id = threads.uploader_id
+    LEFT JOIN boards
+        ON boards.id = threads.board_id
+    WHERE
+        threads.is_archived = 0
+    ORDER BY 
+        threads.time_updated DESC
+    LIMIT
+        amount;
+END //
+DELIMITER ;

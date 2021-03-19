@@ -9,6 +9,15 @@ use Dalton\Framework\Model;
 
 class ThreadModel extends Model {
 
+    public static function pullRecentlyUpdatedThreads() {
+        $statement = Model::getDB()->prepare("CALL pullThreadsForHomepage(?)");
+        $thread_count = 3;
+        $statement->bindParam(1, $thread_count, PDO::PARAM_INT);
+        $statement->execute();
+        $results = $statement->fetchAll(PDO::FETCH_ASSOC);
+        return $results;
+    }
+
     public static function getThreads($board_dir) {
         $statement = Model::getDB()->prepare("CALL selectThreadsFromBoard(?)");
         $statement->bindParam(1, $board_dir, PDO::PARAM_STR);
