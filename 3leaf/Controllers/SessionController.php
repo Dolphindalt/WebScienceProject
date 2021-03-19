@@ -6,10 +6,12 @@ require_once ROOT_PATH.'framework/Controller.php';
 require_once ROOT_PATH.'framework/View.php';
 require_once ROOT_PATH.'3leaf/Models/UserModel.php';
 require_once ROOT_PATH.'3leaf/global_const.php';
+require_once ROOT_PATH.'3leaf/Services/PostTimerService.php';
 
 use Dalton\Framework\ControllerBase;
 use Dalton\Framework\View;
 use Dalton\ThreeLeaf\Models\UserModel;
+use Dalton\ThreeLeaf\Services\PostTimerService;
 
 const HASH_ALGO = 'sha3-512';
 const WAS_WELCOMED = 'was_welcomed';
@@ -50,6 +52,15 @@ class Session extends ControllerBase {
     public function processRegisterFormTask() {
         // Honey pot tactic to prevent bot spam.
         if(!empty($_POST['website'])) die();
+
+        // Prevent spamming via timer.
+        if (!PostTimerService::testPostTimer(OP_REGISTER, 500)) {
+            http_response_code(400);
+            $this->error = "Wait 500 seconds before registering again.";
+            $this->showRegisterPageTask();
+            die();
+        }
+
         $username = $_POST['username'];
         $password = $_POST['password'];
         
@@ -72,6 +83,7 @@ class Session extends ControllerBase {
         $errString = UserModel::tryCreateUser($username, $password);
         if ($errString == '') {
             $this->setupSession($username);
+            PostTimerService::insertIPRecord(OP_REGISTER);
             header('Location: index.php?register/welcome');
         } else {
             http_response_code(409);

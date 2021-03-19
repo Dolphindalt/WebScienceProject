@@ -100,7 +100,7 @@ textarea {
     min-width: 250px;
     padding-left: 5px;
     outline: none;
-    color: var(--text-color);
+    color: var(--variable-text-color);
     padding: 12px 0px;
     padding-left: 0.2em;
 }
@@ -448,6 +448,7 @@ ul {
 /* Post styling. */
 .post-margins {
     margin: 0.2em;
+    word-wrap: break-word;
 }
 
 .post-wrapper {
@@ -466,7 +467,7 @@ ul {
     padding-left: 1em;
     padding-right: 1em;
     padding-bottom: 0.5em;
-    width: 100%;
+    width: 80%;
 }
 
 .post-content p {

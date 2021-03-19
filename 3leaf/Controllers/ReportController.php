@@ -5,10 +5,12 @@ namespace Dalton\ThreeLeaf\Controllers;
 require_once ROOT_PATH.'framework/Controller.php';
 require_once ROOT_PATH.'framework/View.php';
 require_once ROOT_PATH.'3leaf/Models/ReportModel.php';
+require_once ROOT_PATH.'3leaf/Services/PostTimerService.php';
 
 use Dalton\Framework\View;
 use Dalton\Framework\ControllerBase;
 use Dalton\ThreeLeaf\Models\ReportModel;
+use Dalton\ThreeLeaf\Services\PostTimerService;
 
 class Reports extends ControllerBase {
 
@@ -46,9 +48,16 @@ class Reports extends ControllerBase {
             $this->pageNotFound();
         }
 
+        // Prevent spamming via timer.
+        if (!PostTimerService::testPostTimer(OP_CREATE_REPORT, 60)) {
+            http_response_code(429);
+            die();
+        }
+
         $post_id = $this->params['post_id'];
 
         if (ReportModel::createReport($post_id)) {
+            PostTimerService::insertIPRecord(OP_CREATE_REPORT);
             http_response_code(200);
         } else {
             http_response_code(409);

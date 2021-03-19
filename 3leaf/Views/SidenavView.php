@@ -27,7 +27,7 @@
                 <label class="theme-switch" for="dark-checkbox">
                     <input type='checkbox' id='dark-checkbox'>
                 </label>
-                <span class='sidenav-text'>Toggle dark mode</span>
+                <span class='sidenav-text'>Dark mode</span>
                 <script>
                     function switchTheme(e) {
                         if (e.target.checked) {
@@ -39,7 +39,7 @@
                             localStorage.setItem('theme', 'light'); //this will be set to light
                         }
                     }
-                    
+
                     const toggleSwitch = document.getElementById('dark-checkbox');
                     toggleSwitch.addEventListener('change', switchTheme, false);
 

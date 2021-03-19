@@ -613,3 +613,41 @@ BEGIN
     DELETE FROM reports WHERE reports.id = report_id;
 END //
 DELIMITER ;
+
+DELIMITER //
+CREATE OR REPLACE PROCEDURE insertIpAccess(
+    IN ip_addr VARCHAR(36),
+    IN operation VARCHAR(64)
+)
+BEGIN
+    IF (SELECT ip_accesses.ip_addr FROM ip_accesses WHERE ip_accesses.ip_addr = ip_addr AND ip_accesses.operation = operation) IS NULL THEN
+        INSERT INTO ip_accesses (ip_addr, operation, access_time) VALUES (ip_addr, operation, NOW(6));
+    END IF;
+END //
+DELIMITER ;
+
+DELIMITER //
+CREATE OR REPLACE PROCEDURE testIpAccess(
+    IN ip_addr VARCHAR(36),
+    IN operation VARCHAR(64),
+    IN wait_time_seconds INT,
+    OUT allow_access BOOL
+)
+BEGIN
+    DECLARE access_time TIMESTAMP(6);
+    SET access_time = NULL;
+    SET allow_access = 0;
+    SELECT 
+        ip_accesses.access_time
+    FROM
+        ip_accesses
+    WHERE
+        ip_addr = ip_accesses.ip_addr AND operation = ip_accesses.operation
+    INTO
+        access_time;
+    IF access_time IS NULL OR TIMESTAMPADD(SECOND, wait_time_seconds, access_time) < NOW(6) THEN 
+        DELETE FROM ip_accesses WHERE ip_accesses.ip_addr = ip_addr AND ip_accesses.operation = operation;
+        SET allow_access = 1;
+    END IF;
+END //
+DELIMITER ;

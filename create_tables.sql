@@ -111,3 +111,11 @@ CREATE TABLE reports (
     board_dir varchar(12),
     PRIMARY KEY(id)
 );
+
+CREATE TABLE ip_accesses (
+    id INT NOT NULL AUTO_INCREMENT,
+    ip_addr VARCHAR(36) NOT NULL,
+    operation VARCHAR(64),
+    access_time TIMESTAMP(6) DEFAULT NOW(6),
+    PRIMARY KEY(id)
+);

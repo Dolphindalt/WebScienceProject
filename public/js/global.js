@@ -155,6 +155,8 @@ function createReport(clicked_elmnt) {
                 showSnackbar('Login to do this.');
             } else if (xhr.status == 409) {
                 showSnackbar('This post is already reported.');
+            } else if (xhr.status == 429) {
+                showSnackbar('Wait 60 seconds before reporting again.');
             } else {
                 showSnackbar('Something went wrong.');
             }
