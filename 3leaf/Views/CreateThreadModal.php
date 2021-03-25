@@ -17,8 +17,8 @@ if (isset($args['error'])) {
             <div class='container-content'>
                 <form id="threadCreate" name="threadCreate" method='post' enctype='multipart/form-data' class='form-style'>
                     <span><input class='form-input' type='file' name='image' id='image'/></span><br>
-                    <span><input class='form-input' type='text' name='name' id='name' placeholder='Thread name'/></span><br>
-                    <span><textarea class='form-input' name='comment' id='comment' placeholder='Comment'></textarea></span><br>
+                    <span><input class='form-input' type='text' name='name' id='name' placeholder='Thread name' maxlength="64"/></span><br>
+                    <span><textarea class='form-input' name='comment' id='comment' placeholder='Comment' maxlength='8192'></textarea></span><br>
                     <input style="display: none;" type="text" id="website" name="website"/>
                     <button id='threadSubmit' class='center'>Post</button>
                     <?php

@@ -243,7 +243,7 @@ DELIMITER ;
 DELIMITER //
 CREATE OR REPLACE PROCEDURE createThread(
     IN board_directory VARCHAR(12),
-    IN name VARCHAR(1024),
+    IN name VARCHAR(64),
     IN content VARCHAR(8192),
     IN uploader_name VARCHAR(36),
     IN file_id INT)

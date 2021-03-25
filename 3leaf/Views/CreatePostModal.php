@@ -15,7 +15,7 @@ if (isset($args['error'])) {
             <div class='container-content'>
                 <form id='postForm' method='post' enctype='multipart/form-data'>
                     <span><input id='file' class='form-input' type='file' name='image'/></span><br>
-                    <span><textarea id='comment' class='form-input' name='comment' placeholder='Comment'></textarea></span><br>
+                    <span><textarea id='comment' class='form-input' name='comment' placeholder='Comment' maxlength='8192'></textarea></span><br>
                     <input style="display: none;" type="text" id="website" name="website"/>
                     <button id='postButton' class='center'>Post</button>
                     <?php

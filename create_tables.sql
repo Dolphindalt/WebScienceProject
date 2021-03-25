@@ -64,7 +64,7 @@ CREATE TABLE threads (
     time_updated TIMESTAMP(6) DEFAULT NOW(6),
     post_count INT NOT NULL DEFAULT 0,
     image_count INT NOT NULL DEFAULT 0,
-    name VARCHAR(1024) NOT NULL,
+    name VARCHAR(64) NOT NULL,
     uploader_id INT NOT NULL,
     is_archived bool NOT NULL DEFAULT 0,
     FOREIGN KEY(board_id) REFERENCES boards(id),
