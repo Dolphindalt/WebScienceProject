@@ -142,11 +142,7 @@ class Threads extends ControllerBase {
 
         $this->createRepliesOnPost($post_id, $content);
 
-        ?>
-            <script>
-                setCookie('modal-status', 'closed');
-            </script>
-        <?php
+        setcookie('modal-status', 'closed');
 
         PostTimerService::insertIPRecord(OP_CREATE_POST_OR_THREAD);
 
@@ -210,11 +206,7 @@ class Threads extends ControllerBase {
         $content = $this->addGreentext($content);
         $content = $this->addLinks($content);
 
-        ?>
-            <script>
-                setCookie('modal-status', 'closed');
-            </script>
-        <?php
+        setcookie('modal-status', 'closed');
 
         $post_id = PostModel::createPostInThread($board_dir, $thread_id, $content, $_SESSION[USERNAME], $file_id);
 

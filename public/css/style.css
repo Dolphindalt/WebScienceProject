@@ -223,6 +223,12 @@ input[type='file']:hover {
     max-width: calc(100vw - 200px);
 }
 
+@media screen and (max-width: 480px) {
+    .main-wrapper {
+        padding: 0;
+    }
+}
+
 .main-div {
     display: block;
     min-width: 750px;
