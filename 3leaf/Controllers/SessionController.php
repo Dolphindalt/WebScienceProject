@@ -38,7 +38,7 @@ class Session extends ControllerBase {
 
         $password_check = UserModel::getPasswordFromUsername($username);
 
-        if ($password_check != '' && $password == $password_check) {
+        if (hash_equals($password, $password_check)) {
             $this->setupSession($username);
             header('Location: index.php?login/welcome');
         } else {
@@ -127,11 +127,15 @@ class Session extends ControllerBase {
             $_SESSION[LOGGED_IN] = true;
             $_SESSION[ROLE] = (int) $user['role'];
             $_SESSION[USER_ID] = (int) $user['id'];
+            $_SESSION[IP_ADDR] = getUserIP();
         }
     }
 
     public function destroySession() {
         session_unset();
+        if (ini_get('session.use_cookies')) {
+            setcookie(session_name(), '', time() - 42000);
+        }
         session_destroy();
     }
 

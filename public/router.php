@@ -1,11 +1,19 @@
 <?php
 
+if (!defined('ROOT_PATH')) {
+    define('ROOT_PATH', dirname(__DIR__) . '/');
+}
+
+require_once ROOT_PATH.'3leaf/global_const.php';
+
 if (!isset($_SESSION)) {
+    session_set_cookie_params(0, dirname(__DIR__));
     session_start();
 }
 
-if (!defined('ROOT_PATH')) {
-    define('ROOT_PATH', dirname(__DIR__) . '/');
+if (array_key_exists(IP_ADDR, $_SESSION) && $_SESSION[IP_ADDR] != getUserIP()) {
+    destroy_session();
+    session_start();
 }
 
 require_once ROOT_PATH.'config.php';

@@ -1,18 +1,25 @@
 <?php
 
+if (!defined('ROOT_PATH')) {
+    define('ROOT_PATH', dirname(__DIR__) . '/');
+}
+
+require_once ROOT_PATH.'3leaf/global_const.php';
+
 if (!isset($_SESSION)) {
+    session_set_cookie_params(0, dirname(__DIR__));
+    session_start();
+}
+
+if (array_key_exists(IP_ADDR, $_SESSION) && $_SESSION[IP_ADDR] != getUserIP()) {
+    destroy_session();
     session_start();
 }
 
 use Dalton\ThreeLeaf\Controllers\Sidenav;
 
-if (!defined('ROOT_PATH')) {
-    define('ROOT_PATH', dirname(__DIR__) . '/');
-}
-
 require_once ROOT_PATH.'config.php';
 require_once ROOT_PATH.'3leaf/Models/BoardModel.php';
-require_once ROOT_PATH.'3leaf/global_const.php';
 
 use Dalton\ThreeLeaf\Models\BoardModel;
 
