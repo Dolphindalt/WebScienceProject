@@ -70,8 +70,8 @@ use Dalton\ThreeLeaf\Models\BoardModel;
             <div class='main-wrapper'>
                 <div class='main-div'>
                     <div class='logo-div'>
-                        <a href='index.php' title='Home'>
-                            <img src='assets/logo.png' alt='3leaf' />
+                        <a href='index.php' title='Home' style='display:block; width: 400px; margin: 0 auto;'>
+                            <img src='assets/logo.png' alt='3leaf'/>
                         </a>
                     </div>
                     <div>
