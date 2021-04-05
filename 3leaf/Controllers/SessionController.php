@@ -98,7 +98,7 @@ class Session extends ControllerBase {
         header('Location: index.php');
     }
 
-    public function welcomeLoginTask() {
+	public function welcomeLoginTask() {
         if (!isset($_SESSION[WAS_WELCOMED])) {
             $header = 'Welcome ' . $_SESSION[USERNAME] . '!';
             $content = 'Please enjoy your stay.';
@@ -128,7 +128,12 @@ class Session extends ControllerBase {
             $_SESSION[ROLE] = (int) $user['role'];
             $_SESSION[USER_ID] = (int) $user['id'];
             $_SESSION[IP_ADDR] = getUserIP();
-        }
+		} 
+		else {
+			http_response_code(404);
+			echo "User not found.";
+			die();
+		}
     }
 
     public function destroySession() {
