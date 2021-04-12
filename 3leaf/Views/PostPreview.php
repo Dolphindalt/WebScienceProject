@@ -115,8 +115,8 @@ if (!$go_text)
                 if (isset($thread)) {
                     $text_version_post .= "<h4 class='inline'>" . $thread['name'] . "</h4>";
                 }
-                    $text_version_post .= "<p class='posted-by-text inline'><a class='posted-by-text-link'" . $post['username'] . "</a> " . date('d/m/y h:i A', strtotime($post['time_created'])) . "</p>";
-                    $text_version_post .= "<p class='info-text inline post-id' onclick='onPostIDClick(this)'>no." . $post['id'] . "</p>";
+                    $text_version_post .= "<p class='posted-by-text inline'><a class='posted-by-text-link'>" . $post['username'] . "</a> " . date('d/m/y h:i A', strtotime($post['time_created'])) . "</p>" . '&nbsp';
+                    $text_version_post .= "<p class='info-text inline post-id'>no." . $post['id'] . "</p>";
 
                     $text_version_post .= "<div class='dropdown inline'>";
                     $text_version_post .= "<span>&#10157;</span>";
