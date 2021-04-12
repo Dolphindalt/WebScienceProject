@@ -35,7 +35,7 @@ if (array_key_exists('error', $args))
     <?php
         } else {
     ?>
-            <div class='inline'><a class='post-thread-header-text' href='index.php?board/archive/dir=<?php echo $board['directory']; ?>'><h2>[Archive]</h2></a></div>
+            <div class='inline'><h2><a class='post-thread-header-text' href='index.php?board/archive/dir=<?php echo $board['directory']; ?>'>[Archive]</a></h2></div>
     <?php
         }
     ?>
