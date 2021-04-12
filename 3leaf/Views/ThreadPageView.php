@@ -48,6 +48,7 @@ if (array_key_exists('error', $args))
         View::render('PostView.php', ['post' => $post, 'post_ids' => $post_ids, 'board' => $board, 'op_id' => $op_post['id']]);
     }
 ?>
+<div style='margin-top: 16em;'></div>
 <?php
     $args = ['board' => $board];
     if (isset($error))
