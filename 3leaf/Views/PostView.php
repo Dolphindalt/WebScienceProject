@@ -1,9 +1,11 @@
 <?php
 
 use Dalton\ThreeLeaf\Models\PostModel;
+use Dalton\Framework\View;
 
 require_once ROOT_PATH.'3leaf/Models/PostModel.php';
 require_once ROOT_PATH.'3leaf/global_const.php';
+require_once ROOT_PATH.'framework/View.php';
 
 // The OP is displayed differently.
 if (array_key_exists('thread', $args)) {
@@ -17,7 +19,7 @@ $board = $args['board'];
 $op_post_id = $args['op_id'];
 
 // Process links to other posts and threads here.
-$callback = function($matches) use ($post_ids, $op_post_id) {
+$callback = function($matches) use ($post_ids, $op_post_id, $board) {
     $carrots = $matches[1];
     $digits = $matches[2];
     if (in_array($digits, $post_ids)) {
@@ -25,7 +27,16 @@ $callback = function($matches) use ($post_ids, $op_post_id) {
         if ((int) $digits == (int) $op_post_id) {
             $ext = " (OP)";
         }
-        return '<a class="text-link" href=\'#p' . $digits . '\'>'. $carrots . $digits . $ext . '</a>';
+        // Magic here and there.
+        $view = 'PostPreview.php';
+        $args = ['post_ids' => $post_ids, 'post_id' => $digits, 'board' => $board, 'op_id' => $op_post_id, 'go_text' => true ];
+        extract($args, EXTR_SKIP);
+
+        $file = ROOT_PATH . "/3leaf/Views/$view";
+        if (is_readable($file)) {
+            require $file;
+        } 
+        return '<a class="text-link" href=\'#p' . $digits . '\'>'. $carrots . $digits . $ext . '</a>' . $text_version_post;
     }
 
     $post_reply = PostModel::selectPostIDsFromPostID($digits);
@@ -33,7 +44,16 @@ $callback = function($matches) use ($post_ids, $op_post_id) {
         return "<a class='text-link' style='text-decoration: line-through;'>". $carrots . $digits . '</a>';
     }
 
-    return "<a class='text-link' href='index.php?board/dir=" . $post_reply['directory'] . "/thread=" . $post_reply['thread_id'] . "#p" . $digits . "'>". $carrots . $digits . "&#8594;" . $post_reply['directory'] . "</a>";
+    $view = 'PostPreview.php';
+    $args = ['post_ids' => $post_ids, 'post_id' => $digits, 'board' => $board, 'op_id' => $op_post_id, 'go_text' => true ];
+    extract($args, EXTR_SKIP);
+
+    $file = ROOT_PATH . "/3leaf/Views/$view";
+
+    if (is_readable($file)) {
+        require $file;
+    }
+    return "<a class='text-link' href='index.php?board/dir=" . $post_reply['directory'] . "/thread=" . $post_reply['thread_id'] . "#p" . $digits . "'>". $carrots . $digits . "&#8594;" . $post_reply['directory'] . "</a>" . $text_version_post;
 };
 
 $post['content'] = preg_replace_callback('/(&gt;&gt;)([0-9]+)/', $callback, $post['content']);
@@ -107,20 +127,22 @@ function toggleVisibleByClick(elmnt1, elmnt2) {
                             echo '&nbsp;';
                             if (in_array($reply_id, $post_ids)) {
                                 echo '<a class="text-link" href=\'#p' . $reply_id . '\'>>>' . $reply_id . '</a>';
+                                View::render('PostPreview.php', $args = ['post_ids' => $post_ids, 'post_id' => $reply_id, 'board' => $board, 'op_id' => $op_post_id ]);
                             } else {
                                 $post_reply = PostModel::selectPostIDsFromPostID($reply_id);
                                 if ($post_reply == null) {
                                     echo '<a class="text-link style=\'text-decoration: line-through;\'>>>' . $reply_id . '</a>';
                                 } else {
                                     echo "<a class='text-link' href='index.php?board/dir=" . $post_reply['directory'] . "/thread=" . $post_reply['thread_id'] . "#p" . $reply_id . "'>>>" . $reply_id . "</a>";
+                                    View::render('PostPreview.php', $args = ['post_ids' => $post_ids, 'post_id' => $reply_id, 'board' => $board, 'op_id' => $op_post_id ]);
                                 }
                             }
                         }
                     }
                 ?>
             </div>
-            <div class='post-content'>
-                <p><?php echo $post['content']; ?></p>
+            <div class='post-content' style='color: var(--variable-text-color);'>
+                <?php echo $post['content']; ?>
             </div>
         </div>
     </div>

@@ -142,6 +142,29 @@ END //
 DELIMITER ;
 
 DELIMITER //
+CREATE OR REPLACE PROCEDURE selectPostByID(
+    IN post_id INT)
+BEGIN
+    SELECT
+        posts.id,
+        posts.content,
+        posts.time_created,
+        users.username,
+        files.file_name
+    FROM
+        posts
+    LEFT JOIN
+        users ON users.id = posts.uploader_id
+    LEFT JOIN
+        files ON posts.file_id = files.id
+    WHERE 
+        posts.id = post_id
+    LIMIT 
+        1;
+END //
+DELIMITER ;
+
+DELIMITER //
 CREATE OR REPLACE PROCEDURE selectPostIDsByPostID(
     IN post_id INT)
 BEGIN

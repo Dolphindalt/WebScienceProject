@@ -470,6 +470,7 @@ ul {
 .post-margins {
     margin: 0.2em;
     word-wrap: break-word;
+    z-index: 1;
 }
 
 .post-wrapper {
@@ -525,7 +526,6 @@ ul {
 
 /* Dropdown styling. */
 .dropdown {
-    position: relative;
     display: inline-block;
     font-size: 20px;
 }
@@ -620,3 +620,14 @@ from {bottom: 30px; opacity: 1;}
 to {bottom: 0; opacity: 0;}
 } 
 /* End snackbar. */
+
+.post-preview {
+    display: none;
+}
+
+a:hover + .post-preview {
+    display: block;
+    position: absolute;
+    z-index: 0;
+    width: 70%;
+}

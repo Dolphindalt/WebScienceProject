@@ -21,6 +21,18 @@ class PostModel extends Model {
         }
     }
 
+    public static function selectPostByID($post_id) {
+        $statement = Model::getDB()->prepare("CALL selectPostByID(?)");
+        $statement->bindParam(1, $post_id, PDO::PARAM_INT);
+        $statement->execute();
+        $results = $statement->fetchAll(PDO::FETCH_ASSOC);
+        if (empty($results)) {
+            return null;
+        } else {
+            return $results[0];
+        }
+    }
+
     public static function fetchRootPostFromThread($thread_id) {
         $statement = Model::getDB()->prepare("CALL selectRootPostFromThread(?)");
         $statement->bindParam(1, $thread_id, PDO::PARAM_INT);
