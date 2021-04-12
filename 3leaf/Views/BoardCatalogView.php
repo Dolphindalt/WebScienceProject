@@ -14,6 +14,12 @@ if (array_key_exists('error', $args))
 <?php
     if ($is_archive) {
         echo "<h4 class='center'>These threads are archived. You can no longer reply.</h4>";
+        ?>
+            <hr>
+            <div class='center'>
+                <div class='inline'><h2><a class='post-thread-header-text' href='index.php?board/dir=<?php echo $board['directory']; ?>'>[To Active Catalog]</a></h2></div>
+            </div>
+        <?php
     }
 ?>
 <hr>
