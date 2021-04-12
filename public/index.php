@@ -7,7 +7,11 @@ if (!defined('ROOT_PATH')) {
 require_once ROOT_PATH.'3leaf/global_const.php';
 
 if (!isset($_SESSION)) {
-    session_set_cookie_params(0, dirname(__DIR__));
+	/*session_set_cookie_params([
+		'path' => dirname(__DIR__) . '/public',
+		'domain' => $_SERVER['HTTP_HOST'],
+		'secure' => true
+	]);*/
     session_start();
 }
 
