@@ -81,6 +81,11 @@ h4 {
     margin: 0;
 }
 
+.h4 {
+    color: var(--main-header);
+    margin: 0;
+}
+
 hr {
     border-top: 1px solid var(--dropdown-color);
     margin-top: 1em;
@@ -172,6 +177,12 @@ input[type='file']:hover {
     background: var(--text-color);
     color: var(--container-header);
     border: 1px solid var(--text-color);
+}
+
+.hide-long-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    word-wrap: break-word;
 }
 
 .error-text {
@@ -427,19 +438,25 @@ ul {
 
 /* Board catalog styles. */
 .board-catalog-grid {
-    display: grid;
-    grid-template-columns: auto auto auto;
+    display: table;
+    grid-template-columns: auto auto auto auto auto;
     grid-gap: 0.5em;
     align-items: center;
     justify-items: center;
-    padding: 10px;
 }
 
 .catalog-container {
     text-align: center;
-    width: 220px;
-    max-height: 440px;
-	padding-bottom: 1em;
+    width: 260px;
+    max-height: 320px;
+    vertical-align: top;
+    word-wrap: break-word;
+    margin-top: 5px;
+    margin-bottom: 20px;
+    padding: 5px 0 10px;
+    position: relative;
+    display: inline-block;
+    overflow: hidden;
 }
 
 .catalog-container p {
@@ -447,8 +464,8 @@ ul {
 }
 
 .catalog-image {
-    max-width: 200px;
-    max-height: 200px;
+    width: 180px;
+    max-height: 320px;
 }
 /* End board catalog styles. */
 

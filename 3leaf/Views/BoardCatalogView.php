@@ -48,10 +48,16 @@ if (array_key_exists('error', $args))
                     <a href='index.php?board/dir=<?php echo $board['directory']; ?>/thread=<?php echo $thread['id']; ?>'>
                         <img class='catalog-image' src='post_images/<?php echo $post['file_name']; ?>'/>
                     </a>
-                    <p>R: <?php echo $thread['post_count']; ?> I: <?php echo $thread['image_count']; ?></p>
-                    <p class='info-text'>thread no. <?php echo $thread['id']; ?></p>
-                    <p class='posted-by-text'>by <a class='posted-by-text-link' href='index.php?user/username=<?php echo $post['username']; ?>'><?php echo $post['username'] ?></a></p>
-                    <h4><?php echo $thread['name']; ?></h4>
+                    <div style='word-wrap: nowrap;'>
+                        <p style='display: inline;'>R: <?php echo $thread['post_count']; ?> I: <?php echo $thread['image_count']; ?></p>
+                        <p style='display: inline;' class='posted-by-text'>by <a class='posted-by-text-link' href='index.php?user/username=<?php echo $post['username']; ?>'><?php echo $post['username'] ?></a></p>
+                    </div>
+                    <div>
+                    <p class='hide-long-text'>
+                        <b class='h4'><?php echo $thread['name']; ?></b>:
+                        <?php echo strip_tags($post['content'], '<a><p><span>'); ?>
+                    </p>
+                    </div>
                 </div>
 
             <?php
