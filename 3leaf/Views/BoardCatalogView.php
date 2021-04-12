@@ -44,7 +44,7 @@ if (array_key_exists('error', $args))
                 $post = $rootPosts[$i];
                 ?>
 
-                <div class='catalog-container'>
+                <div class='catalog-container hide-long-text'>
                     <a href='index.php?board/dir=<?php echo $board['directory']; ?>/thread=<?php echo $thread['id']; ?>'>
                         <img class='catalog-image' src='post_images/<?php echo $post['file_name']; ?>'/>
                     </a>
@@ -53,10 +53,10 @@ if (array_key_exists('error', $args))
                         <p style='display: inline;' class='posted-by-text'>by <a class='posted-by-text-link' href='index.php?user/username=<?php echo $post['username']; ?>'><?php echo $post['username'] ?></a></p>
                     </div>
                     <div>
-                    <p class='hide-long-text'>
-                        <b class='h4'><?php echo $thread['name']; ?></b>:
-                        <?php echo strip_tags($post['content'], '<a><p><span>'); ?>
-                    </p>
+                        <p>
+                            <b class='h4'><?php echo $thread['name']; ?></b>:
+                            <?php echo strip_tags($post['content'], '<a><p><span>'); ?>
+                        </p>
                     </div>
                 </div>
 

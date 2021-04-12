@@ -450,7 +450,7 @@ ul {
     word-wrap: break-word;
     margin-top: 5px;
     margin-bottom: 20px;
-    padding: 5px 0 10px;
+    padding: 5px 0 3px;
     position: relative;
     display: inline-block;
     overflow: hidden;
@@ -462,7 +462,8 @@ ul {
 
 .catalog-image {
     width: 180px;
-    max-height: 320px;
+    display: inline;
+    max-height: 150px;
 }
 /* End board catalog styles. */
 
