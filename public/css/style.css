@@ -439,10 +439,7 @@ ul {
 /* Board catalog styles. */
 .board-catalog-grid {
     display: table;
-    grid-template-columns: auto auto auto auto auto;
-    grid-gap: 0.5em;
-    align-items: center;
-    justify-items: center;
+    text-align: center;
 }
 
 .catalog-container {
