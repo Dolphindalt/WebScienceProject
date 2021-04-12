@@ -14,7 +14,6 @@ if (array_key_exists('error', $args))
 
 ?>
 <h1 class='center'><?php echo $board['directory']; ?> - <?php echo $board['name']; ?></h1>
-<p class='info-text center'>thread no. <?php echo $thread['id']; ?></p>
 <?php
     if ($thread['is_archived']) {
         echo "<h4 class='center'>This thread is archived. You can no longer reply.</h4>";
