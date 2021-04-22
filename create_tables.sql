@@ -1,5 +1,6 @@
 USE dcaron;
 
+DROP TABLE IF EXISTS ip_accesses;
 DROP TABLE IF EXISTS reports;
 DROP TABLE IF EXISTS post_replies;
 DROP TABLE IF EXISTS posts;
